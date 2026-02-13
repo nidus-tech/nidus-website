@@ -4,25 +4,140 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nidus</title>
+    <meta name="description" content="Nidus — Building autonomous systems for the defense industrial base.">
     <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #0a0a0a;
+            --surface: #111111;
+            --border: #1a1a1a;
+            --text: #e5e5e5;
+            --text-muted: #737373;
+            --accent: #d4d4d4;
+        }
+
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            max-width: 600px;
-            margin: 100px auto;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 560px;
+            width: 100%;
+        }
+
+        .wordmark {
+            font-size: 1rem;
+            font-weight: 600;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3.25rem);
+            font-weight: 500;
+            line-height: 1.2;
+            letter-spacing: -0.02em;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+        }
+
+        .description {
+            font-size: 1.125rem;
+            line-height: 1.7;
+            color: var(--text-muted);
+            margin-bottom: 3rem;
+        }
+
+        .divider {
+            width: 2rem;
+            height: 1px;
+            background: var(--border);
+            margin-bottom: 3rem;
+        }
+
+        .details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .details span {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
+        }
+
+        .links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .links a {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            text-decoration: none;
+            letter-spacing: 0.02em;
+            transition: color 0.2s ease;
+        }
+
+        .links a:hover {
+            color: var(--text);
+        }
+
+        footer {
+            padding: 2rem;
             text-align: center;
         }
-        a {
-            color: #0070f3;
-            text-decoration: none;
-        }
-        a:hover {
-            text-decoration: underline;
+
+        footer span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            letter-spacing: 0.02em;
         }
     </style>
 </head>
 <body>
-    <h1>Welcome to Nidus</h1>
-    <p><a href="/blog">Visit Blog →</a></p>
+    <main>
+        <div class="container">
+            <div class="wordmark">Nidus</div>
+            <h1>Autonomous systems for national defense.</h1>
+            <p class="description">We are building the next generation of robotics for the defense industrial base.</p>
+            <div class="divider"></div>
+            <div class="details">
+                <span>New York City</span>
+                <span>Founded 2025</span>
+            </div>
+            <div class="links">
+                <a href="mailto:info@nidus.tech">Contact</a>
+                <a href="/blog">Blog</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <span>&copy; 2025 Nidus Technologies, Inc.</span>
+    </footer>
 </body>
 </html>
