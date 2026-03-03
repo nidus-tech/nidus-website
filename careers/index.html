@@ -3,26 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Careers at Nidus — Join us in building the manufacturing infrastructure for American Dynamism.">
   <title>Careers &mdash; Nidus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
     html, body {
       height: 100%;
-    }
-
-    body {
       display: flex;
       flex-direction: column;
     }
 
-    main {
-      flex: 1;
+    nav {
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 2rem;
+      height: 52px;
+      border-bottom: 1px solid #000;
+      background: #fff;
+      flex-shrink: 0;
+    }
+
+    .nav-logo {
+      font-family: "Playfair Display", Georgia, serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: -0.025em;
+      color: #000;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-family: "JetBrains Mono", monospace;
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #000;
+      text-decoration: none;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 100ms;
+    }
+
+    .nav-links a:hover,
+    .nav-links a[aria-current="page"] {
+      border-bottom-color: #000;
     }
 
     iframe {
@@ -30,29 +65,21 @@
       width: 100%;
       border: none;
       display: block;
-      /* Ensure iframe fills remaining height after nav */
-      min-height: calc(100vh - 73px);
     }
   </style>
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
   <nav>
-    <a href="/" class="nav-logo" aria-label="Nidus home">Nidus</a>
-    <ul class="nav-links" role="list">
+    <a href="/" class="nav-logo">Nidus</a>
+    <ul class="nav-links">
       <li><a href="/thesis">Thesis</a></li>
       <li><a href="/careers" aria-current="page">Careers</a></li>
     </ul>
   </nav>
-
-  <main id="main">
-    <iframe
-      src="https://kind-thought-6a7.notion.site/ebd//79bb9d74b17f4c22ababcb8cccea3112"
-      title="Careers at Nidus"
-      allowfullscreen
-    ></iframe>
-  </main>
-
+  <iframe
+    src="https://kind-thought-6a7.notion.site/ebd//79bb9d74b17f4c22ababcb8cccea3112"
+    title="Careers at Nidus"
+    allowfullscreen
+  ></iframe>
 </body>
 </html>
