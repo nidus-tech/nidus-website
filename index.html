@@ -3,290 +3,138 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Nidus — Applied AI for defense manufacturing at scale. Building the infrastructure America needs to win.">
+  <meta name="description" content="Nidus — Applied AI for defense manufacturing at scale.">
   <title>Nidus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="/styles.css">
   <style>
-    /* ── Hero ───────────────────────────────────────────────── */
-    .hero {
-      padding: 5rem 3rem 4.5rem;
-      position: relative;
+    :root {
+      --bg: #FFFFFF;
+      --fg: #000000;
+      --muted-fg: #525252;
+      --font-display: "Playfair Display", Georgia, serif;
+      --font-mono: "JetBrains Mono", monospace;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
       overflow: hidden;
     }
 
-    /* Horizontal line texture */
-    .hero::before {
+    body {
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Noise texture */
+    body::before {
       content: '';
-      position: absolute;
+      position: fixed;
       inset: 0;
-      background-image: repeating-linear-gradient(
-        0deg,
-        transparent,
-        transparent 1px,
-        #000 1px,
-        #000 2px
-      );
-      background-size: 100% 4px;
-      opacity: 0.015;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      opacity: 0.02;
       pointer-events: none;
+      z-index: 9999;
     }
 
-    .hero-eyebrow {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 500;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted-fg);
-      margin-bottom: 1.75rem;
+    .splash {
+      text-align: center;
+      padding: 2rem;
     }
 
-    .hero-name {
+    .name {
       font-family: var(--font-display);
       font-weight: 900;
-      font-size: clamp(5rem, 16vw, 10.5rem);
+      font-size: clamp(5rem, 18vw, 11rem);
       letter-spacing: -0.05em;
       line-height: 1;
       display: block;
-      margin-bottom: 2.5rem;
+      margin-bottom: 1.5rem;
     }
 
-    .hero-deco {
+    .deco {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-bottom: 2.5rem;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
     }
 
-    .hero-deco-rule {
-      width: 5rem;
-      height: 4px;
+    .deco-rule {
+      width: 4rem;
+      height: 3px;
       background: var(--fg);
     }
 
-    .hero-deco-square {
-      width: 10px;
-      height: 10px;
+    .deco-square {
+      width: 9px;
+      height: 9px;
       border: 2px solid var(--fg);
     }
 
-    .hero-tagline {
-      font-family: var(--font-body);
-      font-size: clamp(1.2rem, 2.2vw, 1.625rem);
+    .tagline {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
       font-weight: 400;
-      line-height: 1.45;
-      max-width: 38rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      margin-bottom: 3rem;
     }
 
-    /* ── Mission ────────────────────────────────────────────── */
-    .mission {
-      display: grid;
-      grid-template-columns: 13rem 1fr;
-      gap: 4rem;
-      padding: 5rem 3rem;
+    .links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3rem;
     }
 
-    .section-label {
+    .links a {
       font-family: var(--font-mono);
       font-size: 0.75rem;
       font-weight: 500;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted-fg);
-      padding-top: 0.3rem;
+      color: var(--fg);
+      text-decoration: none;
+      padding-bottom: 2px;
+      border-bottom: 1px solid transparent;
+      transition: border-color 100ms;
     }
 
-    .mission-body p {
-      font-size: 1.125rem;
-      line-height: 1.8;
-      margin-bottom: 1.25rem;
+    .links a:hover {
+      border-bottom-color: var(--fg);
     }
 
-    .mission-body p:last-child {
-      margin-bottom: 0;
-    }
-
-    /* ── Inverted statement ─────────────────────────────────── */
-    .statement {
-      background: var(--fg);
-      color: var(--bg);
-      padding: 6rem 3rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    /* Vertical line texture on dark bg */
-    .statement::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image: repeating-linear-gradient(
-        90deg,
-        transparent,
-        transparent 1px,
-        #fff 1px,
-        #fff 2px
-      );
-      background-size: 4px 100%;
-      opacity: 0.03;
-      pointer-events: none;
-    }
-
-    .statement-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 5rem;
-      align-items: center;
-    }
-
-    .statement-hed {
-      font-family: var(--font-display);
-      font-size: clamp(2.5rem, 4.5vw, 3.75rem);
-      font-weight: 900;
-      letter-spacing: -0.025em;
-      line-height: 1.1;
-    }
-
-    .statement-hed em {
-      font-style: italic;
-    }
-
-    .statement-body {
-      font-family: var(--font-body);
-      font-size: 1.125rem;
-      line-height: 1.8;
-      color: rgba(255, 255, 255, 0.72);
-    }
-
-    /* ── CTA ────────────────────────────────────────────────── */
-    .cta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 3rem;
-      padding: 5rem 3rem;
-    }
-
-    .cta-hed {
-      font-family: var(--font-display);
-      font-size: clamp(1.75rem, 3vw, 2.75rem);
-      font-weight: 700;
-      letter-spacing: -0.025em;
-      line-height: 1.2;
-    }
-
-    .cta-sub {
-      display: block;
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
-      font-weight: 400;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted-fg);
-      margin-top: 0.625rem;
-    }
-
-    /* ── Responsive ─────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .hero {
-        padding: 3.5rem 1.5rem 3rem;
-      }
-
-      .mission {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-        padding: 3rem 1.5rem;
-      }
-
-      .statement {
-        padding: 4rem 1.5rem;
-      }
-
-      .statement-inner {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-      }
-
-      .cta {
-        flex-direction: column;
-        align-items: flex-start;
-        padding: 3rem 1.5rem;
-      }
+    .links a:focus-visible {
+      outline: 3px solid var(--fg);
+      outline-offset: 3px;
     }
   </style>
 </head>
 <body>
-  <a href="#main" class="skip-link">Skip to content</a>
-
-  <nav>
-    <a href="/" class="nav-logo" aria-label="Nidus home">Nidus</a>
-    <ul class="nav-links" role="list">
-      <li><a href="/thesis">Thesis</a></li>
-      <li><a href="/careers">Careers</a></li>
-    </ul>
-  </nav>
-
-  <main id="main">
-
-    <!-- Hero -->
-    <section class="hero" aria-label="Introduction">
-      <p class="hero-eyebrow">Applied AI &mdash; Manufacturing &mdash; Defense</p>
-      <span class="hero-name" aria-label="Nidus">NIDUS</span>
-      <div class="hero-deco" aria-hidden="true">
-        <div class="hero-deco-rule"></div>
-        <div class="hero-deco-square"></div>
-      </div>
-      <p class="hero-tagline">Building the manufacturing infrastructure America needs to win the next war.</p>
-    </section>
-
-    <hr>
-
-    <!-- Mission -->
-    <section class="mission" aria-labelledby="mission-label">
-      <p class="section-label" id="mission-label">Mission</p>
-      <div class="mission-body">
-        <p>American Dynamism is betting billions on a workforce that doesn't exist. Over the next decade, the defense manufacturing sector will need 3.8 million skilled workers&mdash;and they won't show up.</p>
-        <p>We're building applied AI software and hardware that scales America's constrained industrial labor force. Software-defined production. Flexible automation. Vision Language Action models integrated into the factory floor.</p>
-        <p>The next generation of defense tech won't be won by whoever has the best product. It will be won by whoever can manufacture at scale, on time, and at cost.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- Inverted statement -->
-    <section class="statement" aria-label="Core belief">
-      <div class="statement-inner">
-        <h2 class="statement-hed">One operator.<br><em>The output<br>of ten.</em></h2>
-        <p class="statement-body">We're building modular manufacturing products powered by robots that work at scale&mdash;where order scheduling, quality control, shift management, and 24/7 operation are handled by software. Humans do what humans do best: problem-solving and continuous improvement.</p>
-      </div>
-    </section>
-
-    <hr>
-
-    <!-- CTA -->
-    <section class="cta" aria-label="Contact">
-      <div>
-        <p class="cta-hed">
-          Building in NYC.
-          <span class="cta-sub">In stealth &mdash; raising now</span>
-        </p>
-      </div>
-      <a href="/careers" class="btn">View Careers &#8594;</a>
-    </section>
-
+  <main class="splash">
+    <span class="name">NIDUS</span>
+    <div class="deco" aria-hidden="true">
+      <div class="deco-rule"></div>
+      <div class="deco-square"></div>
+    </div>
+    <p class="tagline">Applied AI &mdash; Manufacturing &mdash; Defense</p>
+    <nav class="links">
+      <a href="/thesis">Thesis</a>
+      <a href="/careers">Careers</a>
+    </nav>
   </main>
-
-  <hr class="light">
-  <footer>
-    <span class="footer-copy">&copy; 2026 Nidus</span>
-    <ul class="footer-links" role="list">
-      <li><a href="/thesis">Thesis</a></li>
-      <li><a href="/careers">Careers</a></li>
-    </ul>
-  </footer>
-
 </body>
 </html>
