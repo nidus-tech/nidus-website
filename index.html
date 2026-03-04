@@ -23,12 +23,15 @@
       padding: 0;
     }
 
-    html, body {
+    html {
       height: 100%;
-      overflow: hidden;
     }
 
     body {
+      /* 100dvh accounts for mobile browser chrome (address bar) */
+      min-height: 100dvh;
+      min-height: -webkit-fill-available;
+      overflow: hidden;
       background: var(--bg);
       color: var(--fg);
       -webkit-font-smoothing: antialiased;
@@ -108,6 +111,10 @@
       text-transform: uppercase;
       color: var(--fg);
       text-decoration: none;
+      /* 44px min touch target */
+      display: inline-flex;
+      align-items: center;
+      min-height: 44px;
       padding-bottom: 2px;
       border-bottom: 1px solid transparent;
       transition: border-color 100ms;
@@ -120,6 +127,41 @@
     .links a:focus-visible {
       outline: 3px solid var(--fg);
       outline-offset: 3px;
+    }
+
+    .descriptor {
+      position: fixed;
+      bottom: 2rem;
+      left: 2rem;
+      right: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      text-align: left;
+      max-width: 28rem;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 480px) {
+      .tagline {
+        letter-spacing: 0.05em;
+        margin-bottom: 2rem;
+      }
+
+      .links {
+        gap: 2rem;
+      }
+
+      .descriptor {
+        text-align: center;
+        left: 1.5rem;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        max-width: none;
+      }
     }
   </style>
 </head>
@@ -136,5 +178,6 @@
       <a href="/careers">Careers</a>
     </nav>
   </main>
+  <p class="descriptor">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
 </body>
 </html>
