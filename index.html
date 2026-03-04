@@ -71,15 +71,15 @@
       display: block;
     }
 
-    /* Each letter builds individually from the bottom up */
+    /* Each letter reveals left → right in sync with the nozzle sweep */
     .letter {
       display: inline-block;
-      clip-path: inset(100% 0 0 0);
-      animation: b-build 0.45s cubic-bezier(0.4, 0, 0.6, 1) calc(0.3s + var(--i) * 0.22s) forwards;
+      clip-path: inset(0 100% 0 0);
+      animation: b-build 0.3s linear calc(0.3s + var(--i) * 0.256s) forwards;
     }
 
     @keyframes b-build {
-      to { clip-path: inset(0% 0 0 0); }
+      to { clip-path: inset(0 0% 0 0); }
     }
 
     /* Vertical print-head nozzle tracks left → right across the letters */
