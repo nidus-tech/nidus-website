@@ -238,9 +238,9 @@
 </head>
 <body>
   <div class="hud" aria-hidden="true">
-    X&nbsp;+000.00<br>
-    Y&nbsp;+000.00<br>
-    Z&nbsp;+000.00
+    X&nbsp;<span id="hud-x">+000.00</span><br>
+    Y&nbsp;<span id="hud-y">+025.40</span><br>
+    Z&nbsp;<span id="hud-z">+000.00</span>
   </div>
 
   <main class="splash">
@@ -259,5 +259,30 @@
     </nav>
   </main>
   <p class="descriptor">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+
+  <script>
+    (function () {
+      var X_MAX = 152.40, Z_MAX = 2.40;
+      var DELAY = 300, DUR = 1280; // match CSS delays in ms
+      var xEl = document.getElementById('hud-x');
+      var zEl = document.getElementById('hud-z');
+
+      function fmt(n) {
+        var parts = n.toFixed(2).split('.');
+        return '+' + parts[0].padStart(3, '0') + '.' + parts[1];
+      }
+
+      setTimeout(function () {
+        var t0 = performance.now();
+        function tick(now) {
+          var t = Math.min((now - t0) / DUR, 1);
+          xEl.textContent = fmt(X_MAX * t);
+          zEl.textContent = fmt(Z_MAX * t);
+          if (t < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }, DELAY);
+    })();
+  </script>
 </body>
 </html>
