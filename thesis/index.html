@@ -3,21 +3,322 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Why American Dynamism Will Fail — by Justin Sealy, Nidus">
   <title>Thesis &mdash; Nidus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
   <style>
     body {
-      margin: 0;
+      display: block;
+    }
+
+    /* ── Article layout ─────────────────────────────────────────── */
+    .article {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ── Article header ─────────────────────────────────────────── */
+    .article-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 4px solid var(--fg);
+    }
+
+    .article-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .article-byline {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+    }
+
+    .article-byline a {
+      color: var(--fg);
+      border-bottom: 1px solid var(--border-light);
+      transition: border-color 100ms;
+    }
+
+    .article-byline a:hover {
+      border-bottom-color: var(--fg);
+    }
+
+    .article-readtime {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+    }
+
+    .article-meta-divider {
+      width: 1px;
+      height: 0.75rem;
+      background: var(--border-light);
+    }
+
+    /* ── Body prose ─────────────────────────────────────────────── */
+    .article p {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Section headings ───────────────────────────────────────── */
+    .article h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.375rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-top: 3.5rem;
+      margin-bottom: 1.25rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .article h3 {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      font-style: italic;
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+      margin-top: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    /* ── Inline links ───────────────────────────────────────────── */
+    .article a {
+      border-bottom: 1px solid var(--border-light);
+      transition: border-color 100ms;
+    }
+
+    .article a:hover {
+      border-bottom-color: var(--fg);
+    }
+
+    /* ── Lists ──────────────────────────────────────────────────── */
+    .article ul {
+      margin: 0 0 1.5rem 1.25rem;
       padding: 0;
     }
-    iframe {
-      width: 100%;
-      height: 100vh;
-      border: none;
-      display: block;
+
+    .article ul li {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 0.625rem;
+      padding-left: 0.25rem;
+    }
+
+    /* ── Pull stat ──────────────────────────────────────────────── */
+    .pull-stat {
+      margin: 2.5rem 0;
+      padding: 1.75rem 2rem;
+      border-left: 4px solid var(--fg);
+      background: var(--muted);
+    }
+
+    .pull-stat p {
+      font-family: var(--font-display);
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.4;
+      margin: 0;
+      letter-spacing: -0.015em;
+    }
+
+    /* ── Closing note ───────────────────────────────────────────── */
+    .article-footer {
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .article-footer p {
+      font-size: 0.9375rem;
+      color: var(--muted-fg);
+      line-height: 1.75;
+      margin-bottom: 0.75rem;
+    }
+
+    .article-footer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .article-footer a {
+      color: var(--fg);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .article {
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      .article h2 {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+      }
     }
   </style>
 </head>
 <body>
-  <iframe src="https://kind-thought-6a7.notion.site/ebd//2cca3176c81c804a9ed9c63c5fefe712" allowfullscreen></iframe>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav>
+    <a href="/" class="nav-logo" aria-label="Nidus home">Nidus</a>
+    <ul class="nav-links" role="list">
+      <li><a href="/thesis" aria-current="page">Thesis</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <article class="article">
+
+      <header class="article-header">
+        <h1 class="article-title">Why American Dynamism Will Fail</h1>
+        <div class="article-meta">
+          <span class="article-byline">By <a href="https://www.linkedin.com/in/justin-sealy/">Justin</a> &mdash; ex Palantir, Peregrine, Vannevar</span>
+          <div class="article-meta-divider" aria-hidden="true"></div>
+          <span class="article-readtime">10 min read</span>
+        </div>
+      </header>
+
+      <p>In 2018, Elon Musk called Tesla&rsquo;s Model 3 production line &ldquo;production hell.&rdquo; The robots weren&rsquo;t working. The automation was breaking down. His solution? Rip out the robots and hire humans. Lots of humans.</p>
+
+      <p>This dramatic pivot worked. Tesla scaled.</p>
+
+      <p>Ironically, American Dynamism is facing exactly the opposite problem: we&rsquo;re depending on an army of humans to show up in the next 10 years to support manufacturing objectives&hellip;and they won&rsquo;t.</p>
+
+      <h2>Bad Assumptions Lead To Bad Outcomes</h2>
+
+      <p>There&rsquo;s an assumption baked into every American Dynamism pitch deck, every defense tech Series B, every steel mill restart plan. The assumption is simple: <em>if we build it, they will come</em>. Just build the factory or open the shipyard, and skilled workers will line up.</p>
+
+      <p>This assumption is wrong.</p>
+
+      <p>Over the next 10 years, <a href="https://insidedefense.com/daily-news/maritime-industrial-base-needs-25000-new-trade-workers-year-next-decade-navy-estimates">the Navy alone needs 250,000 new workers</a> for submarine and surface vessels. The broader manufacturing sector needs <a href="https://themanufacturinginstitute.org/manufacturers-need-as-many-as-3-8-million-new-employees-by-2033/">3.8 million over the next eight</a>. The average defense manufacturing worker <a href="https://jobswithdod.com/department-of-defense-analysis/the-impact-of-global-defense-policies-on-u-s-job-creation/">is 55 years old</a>, and a huge percentage will be retiring over the next 10 years.</p>
+
+      <p>We expect a major conflict within this time frame. With this in mind we have a hard truth to face. The next generation of Americans is not able, ready, or willing to backfill the blue-collar workforce.</p>
+
+      <p>In two recent surveys, nearly half of <a href="https://www.entrepreneur.com/business-news/what-is-gen-zs-no-1-career-choice-social-media-influencer/459387">Gen Z respondents said they wanted to be social media influencers</a> if given the opportunity and the top two career aspirations among Gen Alpha respondents were to be <a href="https://www.fastcompany.com/91285945/gen-alpha-dream-job-youtube-content-creator">YouTube or TikTok content creators</a>.</p>
+
+      <p>The majority of this generation are not likely to throw on coveralls and bring a lunch pail to work. The defense tech world needs to plan for this reality and start building to solve it.</p>
+
+      <h3>What about the skilled trades renaissance?</h3>
+
+      <p>I&rsquo;d be remiss not to acknowledge a very real trend: skilled trades are booming. <a href="https://www.apprenticeship.gov/data-and-statistics/apprentices-by-state-dashboard">Registered apprenticeships have grown from 360,000 in 2016 to 667,000 in 2024</a>, an 85% increase. <a href="https://public.tableau.com/app/profile/researchcenter/viz/CTEESpring2025Report/CTEES25">Enrollment in vocational-focused community colleges rose 19% since 2020.</a> All this is good and it means there is a subset of the next generation that is interested in trades. We&rsquo;re producing way more plumbers, electricians, and HVAC technicians.</p>
+
+      <p>However, we are notably <em>not</em> producing machinists, production managers, cleared welders, or submarine pipefitters. In fact, <a href="https://www.onetonline.org/link/localtrends/51-4121.00">welders are only projected to grow 2% through 2033, below the 3% average for all occupations</a>. The Hampton Roads maritime industry&rsquo;s vacancies could increase to <a href="https://www.pilotonline.com/2024/03/15/navy-submarines-newport-news-shipbuilding-workforce/">40,000 by 2030.</a></p>
+
+      <p>It&rsquo;s not too hard to see why.</p>
+
+      <ul>
+        <li>Shipyard welders work in confined spaces, at heights, completing a somewhat hazardous and challenging task.</li>
+        <li>Plumbers work in comfortable residential settings incurring little to no personal risk and, once apprenticed, could move towards potential ownership.</li>
+      </ul>
+
+      <p>And of course, a plumber doesn&rsquo;t need to pass a drug test or get a security clearance.</p>
+
+      <p>So yes, resurgent interest in trades means you&rsquo;ll be able to call an expert when your toilet backs up. But it&rsquo;s far less clear who we will call to build the next 100 years of American defense and prosperity.</p>
+
+      <h2>The System Is Taxed</h2>
+
+      <p>This is a looming problem. In fact, I&rsquo;d argue that the only reason we haven&rsquo;t hit a wall yet is because no defense tech company has scaled enough to overburden the system. Anduril has 7,000 employees. Shield AI, Saronic, and others are still measured in low thousands. They&rsquo;re surviving by paying technicians 30&ndash;50% above OEM rates to get them in the door or contracting external machine shops to get the job done.</p>
+
+      <p>This will work out ok for Anduril, because they have the resources to brute force the hiring problem. It won&rsquo;t work when thousands of VC-backed defense companies win contracts and need to field 50,000 units each to make products that win a war.</p>
+
+      <div class="pull-stat">
+        <p>The math is simple and brutal: American Dynamism is betting billions on a workforce that doesn&rsquo;t exist.</p>
+      </div>
+
+      <h2>Silicon Valley&rsquo;s Manufacturing Blind Spot</h2>
+
+      <p>This is a critical juncture. It&rsquo;s urgent that Silicon Valley and Defense Venture learn how real manufacturing is done at scale.</p>
+
+      <p>The companies we should be studying aren&rsquo;t Palantir, Tesla or OpenAI. They&rsquo;re Bosch, Jabil, Toyota, Denso, and Caterpillar. These are the organizations that have figured out how to manufacture complex products at scale with constrained labor pools and 2% margins. They&rsquo;ve built systems that work when American humans are expensive, scarce, or both.</p>
+
+      <p>Manufacturing is not easy, but the tech world is learning that it&rsquo;s much simpler when you own the whole stack. Tesla proved this. Anduril is proving it again. Still, there&rsquo;s a limit to how much you can optimize around human labor when human labor is the limited resource.</p>
+
+      <h2>The Cultural Divide We Should Be Talking About</h2>
+
+      <p>It&rsquo;s no secret that the US is still behind when it comes to truly excellent manufacturing. We have the best software engineering talent in the world, but our sophisticated labor force is not solving the hardest, most impactful blue-collar problems.</p>
+
+      <p>Why?</p>
+
+      <p>There&rsquo;s a clear divide in our country between two types of people: people who wash their hands before they pee and people who wash their hands after. If your immediate reaction to this is &ldquo;who in the world would wash their hands <em>before</em> they pee?&rdquo; then you&rsquo;re (inadvertently) part of the problem.</p>
+
+      <p>I know this because I&rsquo;ve been on both sides of the divide.</p>
+
+      <p>Truth be told, I&rsquo;m all wrong for Silicon Valley. I blind applied to Palantir from a state school with a bad GPA. I was in and out of engineering school (because I hated the classroom). I worked in construction in my free time, and at Robert Bosch on America&rsquo;s factory lines as a manufacturing engineer. I think I only got a Palantir interview because my cover letter mentioned my siblings in Afghanistan: &ldquo;I&rsquo;d love to work on something that brings my brothers home.&rdquo; In my first week, Alex Karp pointed to me in front of the whole DC office and said &ldquo;we need more people from second-rate universities.&rdquo; Universities like mine.</p>
+
+      <p>I think Karp is right. I&rsquo;ve seen amazing cultures across Palantir, Peregrine, and Vannevar. And yet behind all the brilliance, there&rsquo;s a gulf we have to ford. The people who build things, who work with their hands, who understand physical constraints, who know what it&rsquo;s like to be on a factory floor, think differently than the bi-coastal Peter Thiel disciples who have worked Zero &rarr; 1. Not worse. Not better. <em>Differently</em>.</p>
+
+      <p>Zero &rarr; 1 is great. I&rsquo;ve done it. But when it comes to American Dynamism, it&rsquo;s no good if we get stuck after 1. How does 1 become 10,000?</p>
+
+      <h2>A Way Forward</h2>
+
+      <p>There is a default future and it scares me. It goes something like this: American Dynamism companies raise billions. They hit product-market fit. Orders start flowing in. And then everything grinds to a halt because the already strained American industrial labor force breaks under the pressure.</p>
+
+      <p>Based on my assessment of the top 50 defense tech startups, if they hit their projected scale over the next decade, they&rsquo;ll need somewhere between 100,000&ndash;200,000 manufacturing and technical workers.</p>
+
+      <p>I reject this future. But I also don&rsquo;t see a world where Gen Z and Gen Alpha suddenly find interest in factory jobs.</p>
+
+      <p>The clearest way forward is to build functional and modular manufacturing products that can scale our restricted labor force 100x.</p>
+
+      <p>The goal is not to automate away jobs. The goal is to build software and hardware products where one trained operator can oversee what used to take ten. Where the hard parts&mdash;order scheduling, quality control, shift management, and 24/7 operation&mdash;are handled by software. And where the humans do what humans do best: problem-solving, quality control, and continuous improvement.</p>
+
+      <p>We need modular manufacturing, powered by robots that work at scale. We need production systems that are software-defined and automations flexible enough to handle the custom, low-volume, high-mix production that defines defense tech.</p>
+
+      <p>Technology has evolved since Tesla&rsquo;s automations failed in 2018. AI for quality control works now. Collaborative robots are legitimately useful for some workflows. Computer vision for real-time manufacturing feedback is close to production-ready. But most importantly, foundational robotics AI models are having their sunrise moment.</p>
+
+      <p>This opportunity is ripe for the picking, and companies that see this will be the first to scale.</p>
+
+      <h2>Time to Build</h2>
+
+      <p>I believe American Dynamism is in the second quarter of a four quarter game. We&rsquo;re about to learn whether America can still fight (and win) a war, but when I look around, I don&rsquo;t see a game plan for the second half.</p>
+
+      <p>We&rsquo;re building an applied AI company to change this. We&rsquo;re in stealth for now raising money, but we&rsquo;re creating the manufacturing infrastructure that will position America to win in the 4th quarter. We believe the next generation of defense tech won&rsquo;t be won by whoever has the best product. It will be won by whoever has the best <a href="https://www.pi.website/blog/olympics">Vision Language Action</a> model integrated so they can manufacture their products at scale, on time, and at cost. <a href="mailto:justin@nidus.tech">Reach out to me</a> if you want to grind in NYC with the best folks in the biz.</p>
+
+      <p>We look forward to sharing more soon.</p>
+
+      <div class="article-footer">
+        <p><em>If you&rsquo;re a manufacturing engineer, robotics researcher, or defense tech founder who&rsquo;s hitting production constraints, <a href="mailto:justin@nidus.tech">we want to talk to you</a>. And if you&rsquo;re a VC investing in American Dynamism companies, it may be worth asking every portfolio company: &ldquo;What is your plan when you can&rsquo;t find the workers you need to scale?&rdquo;</em></p>
+        <p><em>Because that day is coming faster than you think.</em></p>
+      </div>
+
+    </article>
+  </main>
+
+  <footer>
+    <span class="footer-copy">&copy; 2025 Nidus</span>
+    <ul class="footer-links" role="list">
+      <li><a href="/thesis">Thesis</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+  </footer>
+
 </body>
 </html>
