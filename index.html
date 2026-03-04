@@ -69,22 +69,28 @@
       letter-spacing: -0.05em;
       line-height: 1;
       display: block;
+    }
+
+    /* Each letter builds individually from the bottom up */
+    .letter {
+      display: inline-block;
       clip-path: inset(100% 0 0 0);
-      animation: b-build 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+      animation: b-build 0.45s cubic-bezier(0.4, 0, 0.6, 1) calc(0.3s + var(--i) * 0.22s) forwards;
     }
 
     @keyframes b-build {
       to { clip-path: inset(0% 0 0 0); }
     }
 
-    /* Cyan print-head line that tracks the deposit edge */
+    /* Vertical print-head nozzle tracks left → right across the letters */
     .b-head {
       position: absolute;
-      inset: auto -8px auto -8px;
-      height: 2px;
-      top: 100%;
+      top: 0;
+      bottom: 0;
+      left: -4px;
+      width: 3px;
       pointer-events: none;
-      background: linear-gradient(to right,
+      background: linear-gradient(to bottom,
         transparent 0%,
         rgba(80,200,255,0.4) 15%,
         rgba(140,230,255,1) 50%,
@@ -94,13 +100,13 @@
       box-shadow:
         0 0 5px 2px rgba(100,210,255,0.8),
         0 0 14px 5px rgba(80,190,255,0.3);
-      animation: b-head 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+      animation: b-head 1.28s linear 0.3s forwards;
     }
 
     @keyframes b-head {
-      from { top: 100%; opacity: 1; }
-      92%  { opacity: 0.7; }
-      to   { top: 0%;   opacity: 0; }
+      from { left: -4px;            opacity: 1; }
+      90%  {                         opacity: 1; }
+      to   { left: calc(100% + 4px); opacity: 0; }
     }
 
     .deco {
@@ -182,10 +188,10 @@
       line-height: 1.6;
     }
 
-    /* Deco, tagline, links fade in after the build */
-    .deco    { opacity: 0; animation: fade-in 0.35s ease 1.4s forwards; }
-    .tagline { opacity: 0; animation: fade-up 0.4s ease  1.6s forwards; }
-    .links   { opacity: 0; animation: fade-up 0.4s ease  1.8s forwards; }
+    /* Deco, tagline, links fade in after all letters are built (~1.63s) */
+    .deco    { opacity: 0; animation: fade-in 0.35s ease 1.8s forwards; }
+    .tagline { opacity: 0; animation: fade-up 0.4s ease  2.0s forwards; }
+    .links   { opacity: 0; animation: fade-up 0.4s ease  2.2s forwards; }
 
     @keyframes fade-in { to { opacity: 1; } }
     @keyframes fade-up {
@@ -205,7 +211,7 @@
       line-height: 2;
       pointer-events: none;
       opacity: 0;
-      animation: fade-in 0.3s ease 0.2s forwards, hud-out 0.4s ease 2.2s forwards;
+      animation: fade-in 0.3s ease 0.2s forwards, hud-out 0.4s ease 2.6s forwards;
     }
 
     @keyframes hud-out { to { opacity: 0; } }
@@ -232,14 +238,14 @@
 </head>
 <body>
   <div class="hud" aria-hidden="true">
-    X&nbsp;+000.00<br>
-    Y&nbsp;+000.00<br>
-    Z&nbsp;+000.00
+    X&nbsp;<span id="hud-x">+000.00</span><br>
+    Y&nbsp;<span id="hud-y">+025.40</span><br>
+    Z&nbsp;<span id="hud-z">+000.00</span>
   </div>
 
   <main class="splash">
     <div class="name-wrap">
-      <span class="name">NIDUS</span>
+      <span class="name"><span class="letter" style="--i:0">N</span><span class="letter" style="--i:1">I</span><span class="letter" style="--i:2">D</span><span class="letter" style="--i:3">U</span><span class="letter" style="--i:4">S</span></span>
       <div class="b-head" aria-hidden="true"></div>
     </div>
     <div class="deco" aria-hidden="true">
@@ -253,5 +259,30 @@
     </nav>
   </main>
   <p class="descriptor">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+
+  <script>
+    (function () {
+      var X_MAX = 152.40, Z_MAX = 2.40;
+      var DELAY = 300, DUR = 1280; // match CSS delays in ms
+      var xEl = document.getElementById('hud-x');
+      var zEl = document.getElementById('hud-z');
+
+      function fmt(n) {
+        var parts = n.toFixed(2).split('.');
+        return '+' + parts[0].padStart(3, '0') + '.' + parts[1];
+      }
+
+      setTimeout(function () {
+        var t0 = performance.now();
+        function tick(now) {
+          var t = Math.min((now - t0) / DUR, 1);
+          xEl.textContent = fmt(X_MAX * t);
+          zEl.textContent = fmt(Z_MAX * t);
+          if (t < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }, DELAY);
+    })();
+  </script>
 </body>
 </html>
