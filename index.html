@@ -176,7 +176,6 @@
       position: fixed;
       bottom: 2rem;
       left: 2rem;
-      right: 2rem;
       font-family: var(--font-mono);
       font-size: 0.65rem;
       font-weight: 400;
@@ -186,6 +185,31 @@
       text-align: left;
       max-width: 28rem;
       line-height: 1.6;
+    }
+
+    .contact {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      font-family: var(--font-mono);
+      font-size: 0.65rem;
+      font-weight: 400;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      text-align: right;
+      line-height: 1.6;
+    }
+
+    .contact a {
+      color: var(--muted-fg);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 100ms;
+    }
+
+    .contact a:hover {
+      border-bottom-color: var(--muted-fg);
     }
 
     /* Deco, tagline, links fade in after all letters are built (~1.63s) */
@@ -233,6 +257,10 @@
         bottom: 1.5rem;
         max-width: none;
       }
+
+      .contact {
+        display: none;
+      }
     }
   </style>
 </head>
@@ -259,6 +287,7 @@
     </nav>
   </main>
   <p class="descriptor">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+  <p class="contact">Built in NYC<br><a href="mailto:info@nidus.tech?subject=Question%20about%20Nidus">Contact us</a></p>
 
   <script>
     (function () {
