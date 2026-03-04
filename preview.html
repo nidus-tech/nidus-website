@@ -3,15 +3,14 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nidus — Animation Preview</title>
+  <title>Nidus — Font Preview</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Bebas+Neue&family=Orbitron:wght@900&family=Chakra+Petch:wght@700&display=swap" rel="stylesheet">
   <style>
     :root {
       --fg: #000;
       --muted: #525252;
-      --font-display: "Playfair Display", Georgia, serif;
       --font-mono: "JetBrains Mono", monospace;
     }
 
@@ -27,7 +26,7 @@
     /* ── Page header ── */
     .page-header {
       max-width: 1080px;
-      margin: 0 auto 2.5rem;
+      margin: 0 auto 2rem;
     }
     .page-header h1 {
       font-size: 0.7rem;
@@ -38,11 +37,6 @@
     .page-header p {
       font-size: 0.65rem;
       color: var(--muted);
-    }
-    .page-header code {
-      background: #ccc;
-      padding: 1px 5px;
-      border-radius: 2px;
     }
 
     /* ── Options grid ── */
@@ -77,7 +71,7 @@
       line-height: 1.6;
     }
 
-    /* ── Stage (the white preview box) ── */
+    /* ── Stage ── */
     .stage {
       flex: 1;
       display: flex;
@@ -98,41 +92,10 @@
     }
 
     .name {
-      font-family: var(--font-display);
       font-weight: 900;
       font-size: clamp(2.5rem, 9vw, 3.75rem);
-      letter-spacing: -0.05em;
       line-height: 1;
       display: block;
-    }
-
-    .deco {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      margin-bottom: 0.9rem;
-    }
-    .deco-rule { height: 2px; background: var(--fg); }
-    .deco-square { width: 7px; height: 7px; border: 1.5px solid var(--fg); flex-shrink: 0; }
-
-    .tagline {
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 1.1rem;
-    }
-
-    .links {
-      display: flex;
-      gap: 1.75rem;
-    }
-    .links a {
-      font-size: 0.58rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--fg);
-      text-decoration: none;
     }
 
     /* ── Replay button ── */
@@ -153,97 +116,24 @@
     }
     .replay-btn:hover { background: #f5f5f5; color: var(--fg); }
 
-
-    /* ════════════════════════════════════════
-       OPTION A — LASER ETCH
-       Beam sweeps L→R, etching the wordmark.
-       References: laser cutters
-    ════════════════════════════════════════ */
-
-    .a-name {
+    /* ── Letter-by-letter reveal (matches live site) ── */
+    .letter {
+      display: inline-block;
       clip-path: inset(0 100% 0 0);
-      animation: a-reveal 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
+      animation: f-build 0.6s linear calc(0.3s + var(--i) * 0.35s) forwards;
     }
-    @keyframes a-reveal {
+    @keyframes f-build {
       to { clip-path: inset(0 0% 0 0); }
     }
 
-    /* the laser beam element sits inside .name-wrap */
-    .a-beam {
+    /* Vertical scan head sweeping left → right */
+    .f-head {
       position: absolute;
-      inset: -20% auto -20% 0;
+      top: 0; bottom: 0;
+      left: -4px;
       width: 3px;
       pointer-events: none;
       background: linear-gradient(to bottom,
-        transparent 0%,
-        rgba(255,220,80,0.3) 15%,
-        rgba(255,210,50,1) 42%,
-        rgba(255,255,180,1) 50%,
-        rgba(255,210,50,1) 58%,
-        rgba(255,220,80,0.3) 85%,
-        transparent 100%
-      );
-      filter: blur(0.5px);
-      box-shadow:
-        0 0 6px 2px rgba(255,200,40,0.9),
-        0 0 18px 7px rgba(255,170,0,0.45),
-        0 0 32px 14px rgba(255,140,0,0.15);
-      opacity: 0;
-      animation: a-beam 1.1s cubic-bezier(0.4, 0, 0.2, 1) 0.4s forwards;
-    }
-    @keyframes a-beam {
-      0%   { left: 0%;   opacity: 1; }
-      88%  { opacity: 1; }
-      100% { left: 100%; opacity: 0; }
-    }
-
-    /* deco rule draws outward, square pops in */
-    .a-rule {
-      width: 0;
-      animation: a-rule 0.45s ease-out 1.65s forwards;
-    }
-    @keyframes a-rule { to { width: 2.75rem; } }
-
-    .a-square {
-      opacity: 0;
-      transform: scale(0.2);
-      animation: a-sq 0.25s ease-out 2.05s forwards;
-    }
-    @keyframes a-sq { to { opacity: 1; transform: scale(1); } }
-
-    .a-tagline {
-      opacity: 0;
-      animation: fade-up 0.5s ease 1.85s forwards;
-    }
-    .a-links {
-      opacity: 0;
-      animation: fade-up 0.5s ease 2.05s forwards;
-    }
-
-
-    /* ════════════════════════════════════════
-       OPTION B — PRINT BUILD
-       Wordmark rises layer-by-layer from base.
-       A cyan print-head line tracks the edge.
-       References: 3D printers
-    ════════════════════════════════════════ */
-
-    .b-name {
-      clip-path: inset(100% 0 0 0);
-      animation: b-build 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
-    }
-    @keyframes b-build {
-      to { clip-path: inset(0% 0 0 0); }
-    }
-
-    /* print-head scan line inside name-wrap, moves bottom → top */
-    .b-head {
-      position: absolute;
-      inset: auto -8px auto -8px;
-      height: 2px;
-      top: 100%;
-      pointer-events: none;
-      background: linear-gradient(to right,
         transparent 0%,
         rgba(80,200,255,0.4) 15%,
         rgba(140,230,255,1) 50%,
@@ -253,116 +143,29 @@
       box-shadow:
         0 0 5px 2px rgba(100,210,255,0.8),
         0 0 14px 5px rgba(80,190,255,0.3);
-      animation: b-head 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+      animation: f-head 1.75s linear 0.3s forwards;
     }
-    @keyframes b-head {
-      from { top: 100%; opacity: 1; }
-      92%  { opacity: 0.7; }
-      to   { top: 0%;   opacity: 0; }
+    @keyframes f-head {
+      from { left: -4px;            opacity: 1; }
+      90%  {                         opacity: 1; }
+      to   { left: calc(100% + 4px); opacity: 0; }
     }
 
-    .b-deco {
+    .f-sub {
       opacity: 0;
-      animation: fade-in 0.35s ease 1.4s forwards;
-    }
-    .b-tagline {
-      opacity: 0;
-      animation: fade-up 0.4s ease 1.6s forwards;
-    }
-    .b-links {
-      opacity: 0;
-      animation: fade-up 0.4s ease 1.8s forwards;
+      animation: fade-up 0.4s ease 2.4s forwards;
+      font-size: 0.58rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 0.75rem;
     }
 
+    /* Per-font overrides */
+    .font-bebas    .name { font-family: "Bebas Neue", sans-serif;    font-weight: 400; letter-spacing: 0.04em; }
+    .font-orbitron .name { font-family: "Orbitron", sans-serif;      font-weight: 900; letter-spacing: -0.02em; font-size: clamp(1.8rem, 7vw, 2.8rem); }
+    .font-chakra   .name { font-family: "Chakra Petch", sans-serif;  font-weight: 700; letter-spacing: 0.08em; }
 
-    /* ════════════════════════════════════════
-       OPTION C — ROBOTIC SCAN
-       A sensor sweep line crosses the page;
-       a coordinate HUD shows in the corner.
-       References: robotic arms / positioning systems
-    ════════════════════════════════════════ */
-
-    .c-sweep-layer {
-      position: absolute;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-
-    .c-sweep {
-      position: absolute;
-      left: 0; right: 0;
-      top: -3px;
-      height: 2px;
-      background: linear-gradient(to right,
-        transparent 0%,
-        rgba(160,160,255,0.2) 10%,
-        rgba(200,200,255,0.95) 50%,
-        rgba(160,160,255,0.2) 90%,
-        transparent 100%
-      );
-      box-shadow:
-        0 0 6px 3px rgba(180,180,255,0.7),
-        0 0 18px 7px rgba(160,160,255,0.25);
-      animation: c-sweep 1.6s ease-in-out 0.2s forwards;
-    }
-    @keyframes c-sweep {
-      from { top: -3px; opacity: 1; }
-      92%  { opacity: 1; }
-      to   { top: calc(100% + 3px); opacity: 0; }
-    }
-
-    /* coordinate HUD — top right corner */
-    .c-hud {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      font-size: 0.5rem;
-      letter-spacing: 0.06em;
-      color: rgba(160,160,220,0.75);
-      line-height: 2;
-      pointer-events: none;
-      opacity: 0;
-      animation: fade-in 0.3s ease 0.2s forwards, c-hud-out 0.4s ease 1.75s forwards;
-    }
-    @keyframes c-hud-out { to { opacity: 0; } }
-
-    /* crosshair dot that tracks the sweep line, parked center */
-    .c-dot {
-      position: absolute;
-      left: 1rem;
-      top: -4px;
-      width: 6px;
-      height: 6px;
-      border: 1px solid rgba(180,180,255,0.9);
-      border-radius: 50%;
-      pointer-events: none;
-      animation: c-dot 1.6s ease-in-out 0.2s forwards;
-    }
-    @keyframes c-dot {
-      from { top: -4px; opacity: 1; }
-      92%  { opacity: 1; }
-      to   { top: calc(100% - 2px); opacity: 0; }
-    }
-
-    /* elements appear as sweep passes each one */
-    .c-name    { opacity: 0; animation: pop-in 0.12s ease 0.78s forwards; }
-    .c-deco    { opacity: 0; animation: pop-in 0.12s ease 1.10s forwards; }
-    .c-tagline { opacity: 0; animation: pop-in 0.12s ease 1.22s forwards; }
-    .c-links   { opacity: 0; animation: pop-in 0.12s ease 1.36s forwards; }
-
-    @keyframes pop-in {
-      from { opacity: 0; transform: translateY(2px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-
-    /* ════════════════════════════════════════
-       SHARED KEYFRAMES
-    ════════════════════════════════════════ */
-    @keyframes fade-in {
-      to { opacity: 1; }
-    }
     @keyframes fade-up {
       from { opacity: 0; transform: translateY(5px); }
       to   { opacity: 1; transform: translateY(0); }
@@ -372,93 +175,64 @@
 <body>
 
   <header class="page-header">
-    <h1>Nidus — Animation Concepts</h1>
-    <p>
-      Local preview: run <code>python3 -m http.server 8080</code> in the project folder,
-      then open <code>localhost:8080/preview.html</code>
-    </p>
+    <h1>Font Options — Industrial / Robotics Theme</h1>
+    <p>Same letter-by-letter build animation as the live homepage. Pick your favourite.</p>
   </header>
 
   <main class="options">
 
-    <!-- ── OPTION A: LASER ETCH ── -->
+    <!-- FONT 1: Bebas Neue -->
     <article class="option">
       <div class="opt-label">
-        <h2>A — Laser Etch</h2>
-        <p>Gold beam sweeps left → right, etching the wordmark in. Deco lines draw out after. References laser cutters.</p>
+        <h2>1 — Bebas Neue</h2>
+        <p>Tall, condensed, all-caps slab. Heavy industrial / stencil feel. Used widely in manufacturing and military contexts.</p>
       </div>
-      <div class="stage" id="stage-a">
+      <div class="stage font-bebas" id="stage-f1">
         <div class="name-wrap">
-          <span class="name a-name">NIDUS</span>
-          <div class="a-beam"></div>
+          <span class="name">
+            <span class="letter" style="--i:0">N</span><span class="letter" style="--i:1">I</span><span class="letter" style="--i:2">D</span><span class="letter" style="--i:3">U</span><span class="letter" style="--i:4">S</span>
+          </span>
+          <div class="f-head"></div>
         </div>
-        <div class="deco">
-          <div class="deco-rule a-rule"></div>
-          <div class="deco-square a-square"></div>
-        </div>
-        <p class="tagline a-tagline">Applied AI &mdash; Manufacturing &mdash; Defense</p>
-        <nav class="links a-links">
-          <a href="#">Thesis</a>
-          <a href="#">Careers</a>
-        </nav>
+        <p class="f-sub">Applied AI &mdash; Manufacturing &mdash; Defense</p>
       </div>
-      <button class="replay-btn" onclick="replay('a')">&#8635; Replay</button>
+      <button class="replay-btn" onclick="replay('f1')">&#8635; Replay</button>
     </article>
 
-    <!-- ── OPTION B: 3D PRINT BUILD ── -->
+    <!-- FONT 2: Orbitron -->
     <article class="option">
       <div class="opt-label">
-        <h2>B — Print Build</h2>
-        <p>Wordmark rises from the base up, layer by layer. A cyan print-head line tracks the deposit edge. References 3D printers.</p>
+        <h2>2 — Orbitron</h2>
+        <p>Geometric, modular letterforms. Strong robotics / AI / space-tech associations. Precise and technical.</p>
       </div>
-      <div class="stage" id="stage-b">
+      <div class="stage font-orbitron" id="stage-f2">
         <div class="name-wrap">
-          <span class="name b-name">NIDUS</span>
-          <div class="b-head"></div>
+          <span class="name">
+            <span class="letter" style="--i:0">N</span><span class="letter" style="--i:1">I</span><span class="letter" style="--i:2">D</span><span class="letter" style="--i:3">U</span><span class="letter" style="--i:4">S</span>
+          </span>
+          <div class="f-head"></div>
         </div>
-        <div class="deco b-deco">
-          <div class="deco-rule" style="width: 2.75rem;"></div>
-          <div class="deco-square"></div>
-        </div>
-        <p class="tagline b-tagline">Applied AI &mdash; Manufacturing &mdash; Defense</p>
-        <nav class="links b-links">
-          <a href="#">Thesis</a>
-          <a href="#">Careers</a>
-        </nav>
+        <p class="f-sub">Applied AI &mdash; Manufacturing &mdash; Defense</p>
       </div>
-      <button class="replay-btn" onclick="replay('b')">&#8635; Replay</button>
+      <button class="replay-btn" onclick="replay('f2')">&#8635; Replay</button>
     </article>
 
-    <!-- ── OPTION C: ROBOTIC SCAN ── -->
+    <!-- FONT 3: Chakra Petch -->
     <article class="option">
       <div class="opt-label">
-        <h2>C — Robotic Scan</h2>
-        <p>Sensor sweep line crosses the stage, activating each element as it passes. Coordinate HUD in the corner. References robotic arms.</p>
+        <h2>3 — Chakra Petch</h2>
+        <p>Angular, slightly condensed, engineering-drafting aesthetic. Feels like a CNC machine or aerospace spec sheet.</p>
       </div>
-      <div class="stage" id="stage-c">
-        <div class="c-sweep-layer">
-          <div class="c-sweep"></div>
-          <div class="c-dot"></div>
-        </div>
-        <div class="c-hud">
-          X&nbsp;+000.00<br>
-          Y&nbsp;+000.00<br>
-          Z&nbsp;+000.00
-        </div>
+      <div class="stage font-chakra" id="stage-f3">
         <div class="name-wrap">
-          <span class="name c-name">NIDUS</span>
+          <span class="name">
+            <span class="letter" style="--i:0">N</span><span class="letter" style="--i:1">I</span><span class="letter" style="--i:2">D</span><span class="letter" style="--i:3">U</span><span class="letter" style="--i:4">S</span>
+          </span>
+          <div class="f-head"></div>
         </div>
-        <div class="deco c-deco">
-          <div class="deco-rule" style="width: 2.75rem;"></div>
-          <div class="deco-square"></div>
-        </div>
-        <p class="tagline c-tagline">Applied AI &mdash; Manufacturing &mdash; Defense</p>
-        <nav class="links c-links">
-          <a href="#">Thesis</a>
-          <a href="#">Careers</a>
-        </nav>
+        <p class="f-sub">Applied AI &mdash; Manufacturing &mdash; Defense</p>
       </div>
-      <button class="replay-btn" onclick="replay('c')">&#8635; Replay</button>
+      <button class="replay-btn" onclick="replay('f3')">&#8635; Replay</button>
     </article>
 
   </main>
@@ -466,7 +240,6 @@
   <script>
     function replay(id) {
       const stage = document.getElementById('stage-' + id);
-      // Swap innerHTML to force-reset all CSS animations
       stage.innerHTML = stage.innerHTML;
     }
   </script>
