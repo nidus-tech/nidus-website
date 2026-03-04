@@ -187,7 +187,8 @@
       line-height: 1.6;
     }
 
-    .contact {
+    .contact-origin,
+    .contact-link {
       position: fixed;
       bottom: 2rem;
       right: 2rem;
@@ -201,14 +202,18 @@
       line-height: 1.6;
     }
 
-    .contact a {
+    /* Stack both in bottom-right on desktop */
+    .contact-origin { bottom: 3.8rem; }
+    .contact-link   { bottom: 2rem; }
+
+    .contact-link a {
       color: var(--muted-fg);
       text-decoration: none;
       border-bottom: 1px solid transparent;
       transition: border-color 100ms;
     }
 
-    .contact a:hover {
+    .contact-link a:hover {
       border-bottom-color: var(--muted-fg);
     }
 
@@ -258,8 +263,17 @@
         max-width: none;
       }
 
-      .contact {
-        display: none;
+      .contact-origin {
+        top: 1.25rem;
+        bottom: auto;
+        right: 1.5rem;
+        font-size: 0.6rem;
+      }
+
+      .contact-link {
+        bottom: 5.5rem;
+        right: 1.5rem;
+        font-size: 0.6rem;
       }
     }
   </style>
@@ -287,7 +301,8 @@
     </nav>
   </main>
   <p class="descriptor">AI-powered manufacturing systems to supercharge America's industrial base,<br>powered by foundational robotics models.</p>
-  <p class="contact">Built in NYC<br><a href="mailto:info@nidus.tech?subject=Question%20about%20Nidus">Contact us</a></p>
+  <p class="contact-origin">Built in NYC</p>
+  <p class="contact-link"><a href="mailto:info@nidus.tech?subject=Question%20about%20Nidus">Contact us</a></p>
 
   <script>
     (function () {
