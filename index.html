@@ -56,6 +56,12 @@
       padding: 2rem;
     }
 
+    .name-wrap {
+      position: relative;
+      display: inline-block;
+      margin-bottom: 1.5rem;
+    }
+
     .name {
       font-family: var(--font-display);
       font-weight: 900;
@@ -63,7 +69,38 @@
       letter-spacing: -0.05em;
       line-height: 1;
       display: block;
-      margin-bottom: 1.5rem;
+      clip-path: inset(100% 0 0 0);
+      animation: b-build 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+    }
+
+    @keyframes b-build {
+      to { clip-path: inset(0% 0 0 0); }
+    }
+
+    /* Cyan print-head line that tracks the deposit edge */
+    .b-head {
+      position: absolute;
+      inset: auto -8px auto -8px;
+      height: 2px;
+      top: 100%;
+      pointer-events: none;
+      background: linear-gradient(to right,
+        transparent 0%,
+        rgba(80,200,255,0.4) 15%,
+        rgba(140,230,255,1) 50%,
+        rgba(80,200,255,0.4) 85%,
+        transparent 100%
+      );
+      box-shadow:
+        0 0 5px 2px rgba(100,210,255,0.8),
+        0 0 14px 5px rgba(80,190,255,0.3);
+      animation: b-head 1s cubic-bezier(0.4, 0, 0.6, 1) 0.3s forwards;
+    }
+
+    @keyframes b-head {
+      from { top: 100%; opacity: 1; }
+      92%  { opacity: 0.7; }
+      to   { top: 0%;   opacity: 0; }
     }
 
     .deco {
@@ -145,6 +182,34 @@
       line-height: 1.6;
     }
 
+    /* Deco, tagline, links fade in after the build */
+    .deco    { opacity: 0; animation: fade-in 0.35s ease 1.4s forwards; }
+    .tagline { opacity: 0; animation: fade-up 0.4s ease  1.6s forwards; }
+    .links   { opacity: 0; animation: fade-up 0.4s ease  1.8s forwards; }
+
+    @keyframes fade-in { to { opacity: 1; } }
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(5px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Coordinate HUD — top right corner (from Option C) */
+    .hud {
+      position: fixed;
+      top: 1.5rem;
+      right: 1.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.55rem;
+      letter-spacing: 0.06em;
+      color: rgba(160, 160, 220, 0.75);
+      line-height: 2;
+      pointer-events: none;
+      opacity: 0;
+      animation: fade-in 0.3s ease 0.2s forwards, hud-out 0.4s ease 2.2s forwards;
+    }
+
+    @keyframes hud-out { to { opacity: 0; } }
+
     @media (max-width: 480px) {
       .tagline {
         letter-spacing: 0.05em;
@@ -166,8 +231,17 @@
   </style>
 </head>
 <body>
+  <div class="hud" aria-hidden="true">
+    X&nbsp;+000.00<br>
+    Y&nbsp;+000.00<br>
+    Z&nbsp;+000.00
+  </div>
+
   <main class="splash">
-    <span class="name">NIDUS</span>
+    <div class="name-wrap">
+      <span class="name">NIDUS</span>
+      <div class="b-head" aria-hidden="true"></div>
+    </div>
     <div class="deco" aria-hidden="true">
       <div class="deco-rule"></div>
       <div class="deco-square"></div>
