@@ -10,34 +10,148 @@
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css">
   <style>
-    html, body {
-      height: 100%;
-    }
-
     body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-    }
-
-    iframe {
-      flex: 1;
-      width: 100%;
-      border: none;
       display: block;
-      /* Ensure iframe fills remaining height after nav */
-      min-height: calc(100vh - 73px);
     }
 
     .nav-logo {
       font-family: "Orbitron", sans-serif;
       font-weight: 900;
       letter-spacing: 0.05em;
+    }
+
+    /* ── Article layout ─────────────────────────────────────────── */
+    .article {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    /* ── Article header ─────────────────────────────────────────── */
+    .article-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 4px solid var(--fg);
+    }
+
+    .article-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-byline {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+    }
+
+    /* ── Body prose ─────────────────────────────────────────────── */
+    .article p {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    /* ── Section headings ───────────────────────────────────────── */
+    .article h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.375rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-top: 3.5rem;
+      margin-bottom: 1.25rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── Lists ──────────────────────────────────────────────────── */
+    .article ul, .article ol {
+      margin: 0 0 1.5rem 1.25rem;
+      padding: 0;
+    }
+
+    .article ul li, .article ol li {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 0.625rem;
+      padding-left: 0.25rem;
+    }
+
+    /* ── Role links ─────────────────────────────────────────────── */
+    .role-list {
+      list-style: none;
+      margin: 0 0 1.5rem 0;
+    }
+
+    .role-list li {
+      padding-left: 0;
+    }
+
+    .role-list a {
+      font-family: var(--font-mono);
+      font-size: 0.875rem;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--border-light);
+      width: 100%;
+      transition: border-color 100ms, gap 100ms;
+    }
+
+    .role-list a:hover {
+      border-bottom-color: var(--fg);
+      gap: 0.9rem;
+    }
+
+    .role-arrow {
+      font-size: 0.75rem;
+      color: var(--muted-fg);
+      transition: color 100ms;
+    }
+
+    .role-list a:hover .role-arrow {
+      color: var(--fg);
+    }
+
+    /* ── Location callout ───────────────────────────────────────── */
+    .location-callout {
+      margin: 2.5rem 0 0;
+      padding: 1.25rem 1.5rem;
+      border-left: 4px solid var(--fg);
+      background: var(--muted);
+    }
+
+    .location-callout p {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      line-height: 1.6;
+      margin: 0;
+      color: var(--muted-fg);
+    }
+
+    /* ── Responsive ─────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .article {
+        padding: 2.5rem 1.5rem 4rem;
+      }
+
+      .article h2 {
+        margin-top: 2.5rem;
+        padding-top: 1.5rem;
+      }
     }
   </style>
 </head>
@@ -53,12 +167,65 @@
   </nav>
 
   <main id="main">
-    <iframe
-      src="https://kind-thought-6a7.notion.site/ebd//79bb9d74b17f4c22ababcb8cccea3112"
-      title="Careers at Nidus"
-      allowfullscreen
-    ></iframe>
+    <article class="article">
+
+      <header class="article-header">
+        <h1 class="article-title">Careers at Nidus</h1>
+        <span class="article-byline">In-person &middot; New York City</span>
+      </header>
+
+      <h2>About Nidus</h2>
+      <p>Today, we design industrial equipment for human operators. As fewer Americans choose to work in manufacturing, we need to automate factory operations.</p>
+      <p>Nidus builds adaptive, decision-making robotic systems that operate the high-precision machines that have powered factories for decades &mdash; starting with the defense industrial base, the largest buyer of US-made parts. Our goal is to reduce costs so the US can compete with China.</p>
+      <p>We&rsquo;re based in <strong>New York City</strong>.</p>
+
+      <h2>Why Join Now</h2>
+      <ul>
+        <li><strong>Early.</strong> You&rsquo;ll have enormous ownership and shape how we build.</li>
+        <li><strong>Hard.</strong> Autonomous manipulation in real manufacturing environments is an unsolved problem.</li>
+        <li><strong>Important.</strong> The defense industrial base needs modern manufacturing &mdash; and we&rsquo;re building it. The next war will be won by logistics and this is the Knutson moment of the 21st century.</li>
+        <li><strong>In-person.</strong> We work together in person. Great team, fast iteration, team lunch.</li>
+      </ul>
+
+      <h2>Who Thrives at Nidus</h2>
+      <ul>
+        <li>You&rsquo;ve built systems that work outside the lab.</li>
+        <li>You care about physical-world performance, not just benchmarks.</li>
+        <li>You move quickly and prefer shipping over theorizing.</li>
+        <li>You want to work in-person with a small and senior technical staff. We think less is more these days.</li>
+      </ul>
+
+      <h2>Open Roles</h2>
+      <ul class="role-list">
+        <li><a href="/careers/ml-researcher/"><span class="role-arrow">&rarr;</span> ML Researcher</a></li>
+        <li><a href="/careers/robotics-engineer/"><span class="role-arrow">&rarr;</span> Robotics Engineer</a></li>
+        <li><a href="/careers/hardware-engineer/"><span class="role-arrow">&rarr;</span> Hardware Engineer</a></li>
+        <li><a href="/careers/ml-backend-engineer/"><span class="role-arrow">&rarr;</span> ML Backend Engineer</a></li>
+      </ul>
+
+      <h2>Our Hiring Process</h2>
+      <ol>
+        <li><strong>Intro call</strong> with Justin or Charu (~30 min)</li>
+        <li><strong>Technical conversation</strong> with a tech lead</li>
+        <li><strong>In-person visit</strong> to NYC paid for by Nidus</li>
+      </ol>
+      <p>We move quickly for the right people.</p>
+
+      <h2>Apply</h2>
+      <p>Send us a short note &mdash; tell us who you are, which role interests you, and what you&rsquo;ve built that you&rsquo;re proud of. No cover letter required. A GitHub, personal site, or portfolio is welcome but not mandatory.</p>
+      <p>📬 Email us at <a href="mailto:jobs@nidus.tech"><strong>jobs@nidus.tech</strong></a></p>
+
+      <div class="location-callout">
+        <p>📍 <strong>Location:</strong> In-person in NYC. We are not hiring remotely at this time.</p>
+      </div>
+
+    </article>
   </main>
+
+  <footer>
+    <p class="footer-copy">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+    <a href="mailto:jobs@nidus.tech" class="btn">Apply Now</a>
+  </footer>
 
 </body>
 </html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Robotics Engineer at Nidus — Staff Robotics Engineer, New York City.">
+  <title>Robotics Engineer &mdash; Nidus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    body { display: block; }
+
+    .nav-logo {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    .article {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
+    }
+
+    .article-header {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 4px solid var(--fg);
+    }
+
+    .article-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.25rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+    }
+
+    .article-meta {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .article-byline {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+    }
+
+    .article-byline a {
+      color: var(--fg);
+      border-bottom: 1px solid var(--border-light);
+      transition: border-color 100ms;
+    }
+
+    .article-byline a:hover { border-bottom-color: var(--fg); }
+
+    .article p {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+
+    .article h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.375rem, 3vw, 1.75rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      margin-top: 3.5rem;
+      margin-bottom: 1.25rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    .article ul {
+      margin: 0 0 1.5rem 1.25rem;
+      padding: 0;
+    }
+
+    .article ul li {
+      font-family: var(--font-body);
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      margin-bottom: 0.625rem;
+      padding-left: 0.25rem;
+    }
+
+    .comp-block {
+      margin: 1.25rem 0 1.5rem;
+      padding: 1.25rem 1.5rem;
+      border-left: 4px solid var(--fg);
+      background: var(--muted);
+    }
+
+    .comp-block p {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 0.04em;
+      line-height: 1.9;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .article { padding: 2.5rem 1.5rem 4rem; }
+      .article h2 { margin-top: 2.5rem; padding-top: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav>
+    <a href="/" class="nav-logo" aria-label="Nidus home">NIDUS</a>
+    <ul class="nav-links" role="list">
+      <li><a href="/thesis">Thesis</a></li>
+      <li><a href="/careers" aria-current="page">Careers</a></li>
+    </ul>
+  </nav>
+
+  <main id="main">
+    <article class="article">
+
+      <header class="article-header">
+        <h1 class="article-title">Robotics Engineer</h1>
+        <div class="article-meta">
+          <span class="article-byline"><a href="/careers/">Careers at Nidus</a></span>
+        </div>
+      </header>
+
+      <h2>About Nidus</h2>
+      <p>Today, we design industrial equipment for human operators. As fewer Americans choose to work in manufacturing, we need to automate factory operations.</p>
+      <p>Nidus builds adaptive, decision-making robots that operate the high-precision, rule-based machines that have powered factories for decades. We&rsquo;re starting with the defense industrial base, the largest buyer of US-made parts, with the goal of reducing costs enough to compete in the commercial market.</p>
+
+      <h2>The Role</h2>
+      <p>We are seeking a <strong>Staff Robotics Engineer</strong> to bring next-generation robotics algorithms and Vision-Language-Action models to production manufacturing environments. This role is for someone who is scrappy and willing to move quickly and iterate rapidly while keeping long-term design goals in mind.</p>
+      <div class="comp-block">
+        <p>Salary &nbsp;&nbsp;$200,000 &ndash; $275,000<br>
+        Equity &nbsp;&nbsp;Meaningful equity stake in an early-stage company</p>
+      </div>
+
+      <h2>Key Responsibilities</h2>
+      <ul>
+        <li>Design, develop, and deploy robotic systems integrating hardware components with sophisticated software control algorithms.</li>
+        <li>Lead technical architecture decisions for robotics platforms, including mechanical design, electronics integration, and software frameworks.</li>
+        <li>Support sensor fusion and latency improvement efforts.</li>
+        <li>Own the sim-to-real pipeline of our robotics algorithms.</li>
+        <li>Develop and implement control systems, inverse kinematics algorithms, and safety algorithms.</li>
+        <li>Prototype and test robotic systems in real-world environments, iterating based on performance data.</li>
+      </ul>
+
+      <h2>Required Qualifications</h2>
+      <ul>
+        <li>7+ years of experience in robotics development, with demonstrated expertise in both hardware and software integration.</li>
+        <li>Strong proficiency in robotics frameworks (ROS/ROS2) and programming languages (C++, Python).</li>
+        <li>Experience with sensor fusion, computer vision, SLAM, or motion planning algorithms.</li>
+        <li>Hands-on experience with manufacturing processes and production-grade hardware development.</li>
+        <li>Proven track record of shipping robotic products or systems from concept to deployment.</li>
+      </ul>
+
+      <h2>Preferred Qualifications</h2>
+      <ul>
+        <li>Familiarity with embedded systems, real-time operating systems, and edge computing.</li>
+        <li>Familiarity with GPU performance optimization.</li>
+        <li>Experience with AI/ML applications in robotics, including deep learning for perception and control.</li>
+        <li>Strong understanding of mechanical design, CAD tools, and design for manufacturing principles.</li>
+      </ul>
+
+      <h2>Location</h2>
+      <p>This position is <strong>in-person in New York City</strong>. We are not hiring remotely at this time.</p>
+
+      <h2>Apply</h2>
+      <p>Send us a short note &mdash; tell us who you are, what draws you to this role, and what you&rsquo;ve built that you&rsquo;re proud of. No cover letter required. A GitHub, personal site, or portfolio is welcome but not mandatory.</p>
+      <p>📬 Email us at <a href="mailto:jobs@nidus.tech"><strong>jobs@nidus.tech</strong></a></p>
+
+    </article>
+  </main>
+
+  <footer>
+    <p class="footer-copy">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+    <a href="mailto:jobs@nidus.tech" class="btn">Apply Now</a>
+  </footer>
+
+</body>
+</html>
