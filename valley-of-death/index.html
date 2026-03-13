@@ -20,74 +20,99 @@
       letter-spacing: 0.05em;
     }
 
-    /* ── CSS variable for nav height ─────────────────────────── */
     :root {
       --nav-h: 57px;
     }
 
-    /* ── Scroll-snap container ─────────────────────────────────── */
-    .scroll-container {
-      height: calc(100dvh - var(--nav-h, 57px));
-      overflow-y: auto;
-      scroll-snap-type: y mandatory;
+    /* ── Split layout ──────────────────────────────────────────── */
+    .page-split {
       position: relative;
+      height: calc(100dvh - var(--nav-h, 57px));
     }
 
+    /* Text column: full width, scroll-snap, content aligned left 50% */
+    .text-column {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      scrollbar-width: none; /* Firefox */
+      z-index: 2;
+    }
+
+    .text-column::-webkit-scrollbar {
+      display: none; /* Chrome/Safari */
+    }
+
+    /* Right: fixed wave visualization */
+    .wave-column {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    /* ── Sections (left column) ────────────────────────────────── */
     .section {
       height: calc(100dvh - var(--nav-h, 57px));
       scroll-snap-align: start;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-start;
+      padding-left: calc(25% - 240px);
       position: relative;
-      z-index: 2;
       transition: background 0.4s ease, color 0.4s ease;
     }
 
-    /* ── Valley sections: muted background ───────────────────── */
-    .section[data-index="1"],
-    .section[data-index="4"] {
-      background: var(--muted);
+    /* ── Dynamic coloring (driven by JS) ─────────────────────── */
+    .section {
+      background: transparent;
     }
 
-    /* ── DROP section: inverted ───────────────────────────────── */
-    .section[data-index="3"] {
-      background: var(--fg);
+    .page-split {
+      transition: background 0.05s linear;
+    }
+
+    /* Inverted text styles applied via .inverted class on sections */
+    .section.inverted {
       color: var(--bg);
     }
 
-    .section[data-index="3"] .section-label {
+    .section.inverted .section-label {
       color: rgba(255,255,255,0.5);
     }
 
-    .section[data-index="3"] .section-body {
+    .section.inverted .section-body {
       color: rgba(255,255,255,0.65);
     }
 
-    .section[data-index="3"] .section-stat {
+    .section.inverted .section-stat {
       color: rgba(255,255,255,0.5);
       border-top-color: rgba(255,255,255,0.2);
     }
 
-    .section[data-index="3"] .deco-rule {
+    .section.inverted .deco-rule {
       background: var(--bg);
     }
 
-    .section[data-index="3"] .deco-square {
+    .section.inverted .deco-square {
       border-color: var(--bg);
     }
 
     .section-inner {
-      max-width: 600px;
-      padding: 2rem;
-      text-align: center;
+      max-width: 480px;
+      padding: 2.5rem 3rem;
+      text-align: left;
     }
 
-    /* ── Deco element (above label) ──────────────────────────── */
+    /* ── Deco element ──────────────────────────────────────────── */
     .section-deco {
       display: flex;
       align-items: center;
-      justify-content: center;
       gap: 0.6rem;
       margin-bottom: 1.25rem;
     }
@@ -116,7 +141,7 @@
 
     .section-heading {
       font-family: "Orbitron", sans-serif;
-      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-size: clamp(1.5rem, 3vw, 2.25rem);
       font-weight: 900;
       line-height: 1.15;
       letter-spacing: -0.03em;
@@ -125,12 +150,11 @@
 
     .section-body {
       font-family: "Space Grotesk", sans-serif;
-      font-size: 1.0625rem;
+      font-size: 1rem;
       line-height: 1.8;
       color: var(--muted-fg);
     }
 
-    /* ── Stat line ────────────────────────────────────────────── */
     .section-stat {
       font-family: var(--font-mono);
       font-size: 0.7rem;
@@ -143,16 +167,16 @@
       border-top: 1px solid var(--border-light);
     }
 
-    /* ── SVG wave overlay ──────────────────────────────────────── */
+    /* ── SVG wave (fills right column) ─────────────────────────── */
     .wave-svg {
-      position: fixed;
-      top: var(--nav-h, 57px);
-      left: 0;
+      position: absolute;
+      inset: 0;
       width: 100%;
-      height: calc(100dvh - var(--nav-h, 57px));
-      z-index: 3;
+      height: 100%;
       pointer-events: none;
-      /* wave naturally disappears against the dark DROP section */
+      /* Fade trail on left edge */
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 30%);
+      mask-image: linear-gradient(to right, transparent 0%, black 30%);
     }
 
     .wave-svg path {
@@ -166,7 +190,6 @@
       stroke-dasharray: 8 6;
     }
 
-    /* ── Blinking dots ─────────────────────────────────────────── */
     .wave-dot {
       fill: var(--wave-stroke, var(--fg));
       opacity: 0;
@@ -182,6 +205,7 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.15; }
     }
+
 
     /* ── Scroll-triggered entrance animations ────────────────── */
     .section-inner {
@@ -219,7 +243,7 @@
       transform: translateY(0);
     }
 
-    /* ── Section 1: entrance on load (staggered) ─────────────── */
+    /* Section 1: entrance on load */
     .section[data-index="0"] .section-inner {
       opacity: 1;
       transform: none;
@@ -255,7 +279,7 @@
     .scroll-hint {
       position: absolute;
       bottom: 2.5rem;
-      left: 50%;
+      left: 25%;
       transform: translateX(-50%);
       display: flex;
       flex-direction: column;
@@ -286,7 +310,7 @@
 
     @keyframes hint-in {
       from { opacity: 0; transform: translateX(-50%) translateY(4px); }
-      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+      to   { opacity: 0.8; transform: translateX(-50%) translateY(0); }
     }
 
     @keyframes bounce-arrow {
@@ -306,14 +330,80 @@
       border-top-color: var(--border-light);
     }
 
-    /* ── Responsive ────────────────────────────────────────────── */
-    @media (max-width: 768px) {
-      .section-inner {
-        padding: 1.5rem;
+    /* ── Dot explosion overlay ───────────────────────────────── */
+    .dot-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 200;
+      pointer-events: none;
+      background: var(--bg);
+      clip-path: circle(0px at var(--dot-cx, 75%) var(--dot-cy, 80%));
+      will-change: clip-path;
+    }
+
+    .dot-overlay.active {
+      pointer-events: none; /* always pass scroll events through */
+    }
+
+    .dot-overlay-content {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem;
+      opacity: 0;
+    }
+
+    .dot-overlay-content.visible {
+      opacity: 1;
+    }
+
+    .dot-overlay-body {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(1.125rem, 2.5vw, 1.5rem);
+      line-height: 1.7;
+      color: var(--muted-fg);
+      max-width: 580px;
+      margin-bottom: 2rem;
+    }
+
+    .dot-overlay-body strong {
+      color: var(--fg);
+    }
+
+    .dot-overlay .btn {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.4s ease 0.2s, transform 0.4s ease 0.2s, background 100ms, color 100ms;
+    }
+
+    .dot-overlay-content.visible .btn {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    /* ── Responsive: stack on mobile ─────────────────────────── */
+    @media (max-width: 900px) {
+      .wave-column {
+        display: none;
       }
 
-      .wave-svg {
-        opacity: 0.35;
+      .section {
+        justify-content: center;
+        padding-left: 0;
+      }
+
+      .section-inner {
+        text-align: center;
+        padding: 2rem 1.5rem;
+      }
+
+      .section-deco {
+        justify-content: center;
       }
 
       .section-heading {
@@ -321,7 +411,7 @@
       }
 
       .scroll-hint {
-        bottom: 1.5rem;
+        left: 50%;
       }
     }
   </style>
@@ -337,109 +427,117 @@
     </ul>
   </nav>
 
-  <!-- Fixed SVG wave — sibling of scroll container, not inside it -->
-  <svg class="wave-svg" aria-hidden="true">
-    <defs>
-      <clipPath id="dotted-clip">
-        <rect id="dotted-clip-rect" x="0" y="0" width="0" height="100%" />
-      </clipPath>
-    </defs>
-    <path id="wave-solid" />
-    <path id="wave-dotted" clip-path="url(#dotted-clip)" />
-    <circle class="wave-dot" id="dot-peak1" r="5" />
-    <circle class="wave-dot" id="dot-valley1" r="5" />
-    <circle class="wave-dot" id="dot-peak2" r="5" />
-    <circle class="wave-dot" id="dot-valley2" r="5" />
-  </svg>
+  <div class="page-split">
+    <!-- Left: text column -->
+    <div class="text-column" id="main">
 
-  <div class="scroll-container" id="main">
-
-    <!-- Section 1: Peak 1 -->
-    <section class="section" data-index="0">
-      <div class="section-inner">
-        <div class="section-deco" aria-hidden="true">
-          <div class="deco-rule"></div>
-          <div class="deco-square"></div>
+      <section class="section" data-index="0">
+        <div class="section-inner">
+          <div class="section-deco" aria-hidden="true">
+            <div class="deco-rule"></div>
+            <div class="deco-square"></div>
+          </div>
+          <p class="section-label">Peak 1</p>
+          <h2 class="section-heading">Traction</h2>
+          <p class="section-body">A defense startup proves its technology works. Small contracts land. SBIRs, pilot programs, OTA awards. The product is real, the mission is clear, and the DoD is paying attention.</p>
+          <p class="section-stat">$1.7B in SBIR/STTR awards annually</p>
         </div>
-        <p class="section-label">Peak 1</p>
-        <h2 class="section-heading">The Promise</h2>
-        <p class="section-body">American Dynamism companies raise billions. They hit product-market fit. Orders start flowing in. The future looks bright.</p>
-        <p class="section-stat">$220B+ raised in defense-tech since 2021</p>
-      </div>
-      <div class="scroll-hint" id="scroll-hint">
-        Scroll
-        <svg class="scroll-hint-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M8 3v10M3 9l5 5 5-5" />
-        </svg>
-      </div>
-    </section>
-
-    <!-- Section 2: Valley 1 (Valley of Death) -->
-    <section class="section" data-index="1">
-      <div class="section-inner">
-        <div class="section-deco" aria-hidden="true">
-          <div class="deco-rule"></div>
-          <div class="deco-square"></div>
+        <div class="scroll-hint" id="scroll-hint">
+          Scroll
+          <svg class="scroll-hint-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 3v10M3 9l5 5 5-5" />
+          </svg>
         </div>
-        <p class="section-label">Valley of Death</p>
-        <h2 class="section-heading">The First Valley</h2>
-        <p class="section-body">Every startup knows this valley. The gap between prototype and product. Most companies prepare for this. It&rsquo;s hard, but it&rsquo;s expected.</p>
-        <p class="section-stat">~90% of hardware startups fail here</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- Section 3: Peak 2 -->
-    <section class="section" data-index="2">
-      <div class="section-inner">
-        <div class="section-deco" aria-hidden="true">
-          <div class="deco-rule"></div>
-          <div class="deco-square"></div>
+      <section class="section" data-index="1">
+        <div class="section-inner">
+          <div class="section-deco" aria-hidden="true">
+            <div class="deco-rule"></div>
+            <div class="deco-square"></div>
+          </div>
+          <p class="section-label">Valley of Death</p>
+          <h2 class="section-heading">The First Valley</h2>
+          <p class="section-body">Small contracts expire. The major program of record hasn&rsquo;t materialized. The gap between short-term pilots and long-term production deals is where most defense startups stall out or die.</p>
+          <p class="section-stat">~90% of defense startups never reach production</p>
         </div>
-        <p class="section-label">Peak 2</p>
-        <h2 class="section-heading">Scale in Sight</h2>
-        <p class="section-body">Product works. Contracts signed. The path to manufacturing at scale seems clear. But there&rsquo;s a problem no one is talking about.</p>
-        <p class="section-stat">$933B in DoD contracts awarded FY2023</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- Section 4: The DROP -->
-    <section class="section" data-index="3">
-      <div class="section-inner">
-        <div class="section-deco" aria-hidden="true">
-          <div class="deco-rule"></div>
-          <div class="deco-square"></div>
+      <section class="section" data-index="2">
+        <div class="section-inner">
+          <div class="section-deco" aria-hidden="true">
+            <div class="deco-rule"></div>
+            <div class="deco-square"></div>
+          </div>
+          <p class="section-label">Peak 2</p>
+          <h2 class="section-heading">The Award</h2>
+          <p class="section-body">The program of record lands. Multi-year, high-volume production. The company celebrated. But the contract comes with expectations: deliver at scale, on time, at cost. And that&rsquo;s where the real problem starts.</p>
+          <p class="section-stat">$933B in DoD contracts awarded FY2023</p>
         </div>
-        <p class="section-label">The Drop</p>
-        <h2 class="section-heading">The Bottom Falls Out</h2>
-        <p class="section-body">The workforce doesn&rsquo;t exist. 250,000 workers needed for the Navy alone. 3.8 million for manufacturing. The average defense worker is 55. Gen Z wants to be influencers.</p>
-        <p class="section-stat">Avg. age of skilled defense worker: 55</p>
-      </div>
-    </section>
+      </section>
 
-    <!-- Section 5: Valley 2 (2nd Valley of Death) -->
-    <section class="section" data-index="4">
-      <div class="section-inner">
-        <div class="section-deco" aria-hidden="true">
-          <div class="deco-rule"></div>
-          <div class="deco-square"></div>
+      <section class="section" data-index="3">
+        <div class="section-inner">
+          <div class="section-deco" aria-hidden="true">
+            <div class="deco-rule"></div>
+            <div class="deco-square"></div>
+          </div>
+          <p class="section-label">The Drop</p>
+          <h2 class="section-heading">Who Builds It?</h2>
+          <p class="section-body">Scale demands a workforce that doesn&rsquo;t exist. 250,000 workers needed for the Navy alone. 3.8 million for manufacturing. The average defense worker is 55. The pipeline is empty.</p>
+          <p class="section-stat">Avg. age of skilled defense worker: 55</p>
         </div>
-        <p class="section-label">2nd Valley of Death</p>
-        <h2 class="section-heading">The Valley No One Prepared For</h2>
-        <p class="section-body">American Dynamism is betting billions on a workforce that doesn&rsquo;t exist. This is the valley of death that will define the next decade.</p>
-        <p class="section-stat">3.8M manufacturing jobs unfilled by 2033</p>
+      </section>
+
+      <section class="section" data-index="4">
+        <div class="section-inner">
+          <div class="section-deco" aria-hidden="true">
+            <div class="deco-rule"></div>
+            <div class="deco-square"></div>
+          </div>
+          <p class="section-label">2nd Valley of Death</p>
+          <h2 class="section-heading">The Second Valley</h2>
+          <p class="section-body">Defense startups won the contracts. They proved the technology. But they can&rsquo;t build at scale because the hands and the expertise simply aren&rsquo;t there. This is the valley of death that will define the next decade.</p>
+          <p class="section-stat">3.8M manufacturing jobs unfilled by 2033</p>
+        </div>
+      </section>
+
+      <!-- Section 6: Finale (scroll target for dot explosion) -->
+      <section class="section" data-index="5"></section>
+    </div>
+
+    <!-- Right: wave visualization -->
+    <div class="wave-column" id="wave-col">
+      <svg class="wave-svg" aria-hidden="true">
+        <defs>
+          <clipPath id="dotted-clip">
+            <rect id="dotted-clip-rect" x="0" y="0" width="0" height="100%" />
+          </clipPath>
+        </defs>
+        <path id="wave-solid" />
+        <path id="wave-dotted" clip-path="url(#dotted-clip)" />
+        <circle class="wave-dot" id="dot-peak1" r="5" />
+        <circle class="wave-dot" id="dot-valley1" r="5" />
+        <circle class="wave-dot" id="dot-peak2" r="5" />
+        <circle class="wave-dot" id="dot-valley2" r="5" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Dot explosion overlay -->
+  <div class="dot-overlay" id="dot-overlay">
+    <div class="dot-overlay-content" id="dot-overlay-content">
+      <p class="dot-overlay-body">We&rsquo;ll need both people and robots to bring the US out of that second valley. <strong>Nidus is building the robots.</strong></p>
+      <div style="display:flex;gap:1.5rem;flex-wrap:wrap;justify-content:center">
+        <a href="/careers" class="btn">Jobs</a>
+        <a href="mailto:info@nidus.tech" class="btn">Contact Us</a>
       </div>
-      <div class="section-footer">
-        <footer>
-          <p class="footer-copy">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
-          <a href="mailto:info@nidus.tech" class="btn">Contact Us</a>
-        </footer>
-      </div>
-    </section>
+    </div>
   </div>
 
   <script>
     (function () {
-      /* ── Measure nav height dynamically ──────────────────────── */
+      /* ── Measure nav height ──────────────────────────────────── */
       var navEl = document.querySelector('nav');
       function measureNav() {
         var h = navEl.offsetHeight;
@@ -448,7 +546,8 @@
       measureNav();
 
       /* ── Elements ────────────────────────────────────────────── */
-      var container = document.querySelector('.scroll-container');
+      var container = document.querySelector('.text-column');
+      var waveCol = document.getElementById('wave-col');
       var svgEl = document.querySelector('.wave-svg');
       var solidPath = document.getElementById('wave-solid');
       var dottedPath = document.getElementById('wave-dotted');
@@ -459,83 +558,145 @@
         document.getElementById('dot-peak2'),
         document.getElementById('dot-valley2')
       ];
-      var dotThresholds = [0.0, 0.2, 0.4, 0.85];
+      /* ── SVG path generation ────────────────────────────────── */
+      // Wave drawn in wide coordinate space (3x panel width).
+      // viewBox pans horizontally so the endpoint stays on the right.
+      var WAVE_WIDTH_MULT = 3;
+      var ENDPOINT_POS = 0.7;
 
-      /* ── SVG path generation (dynamic viewBox) ───────────────── */
-      // Key Y positions as fractions of height: peak=0.22, valley=0.65, peak2=0.15, drop=0.92
+      // Key points of the wave. Dots sit at indices 1, 2, 3, 6
+      // which map to sections 0, 1, 2, 3–4.
       var keyPoints = [
-        { xFrac: 0.0,  yFrac: 0.30 },  // start (peak1 level)
-        { xFrac: 0.2,  yFrac: 0.30 },  // peak1
-        { xFrac: 0.4,  yFrac: 0.68 },  // valley1
-        { xFrac: 0.6,  yFrac: 0.18 },  // peak2
-        { xFrac: 0.72, yFrac: 0.40 },  // start of drop
-        { xFrac: 0.85, yFrac: 0.88 },  // steep drop
-        { xFrac: 1.0,  yFrac: 0.95 }   // valley2 (bottom)
+        { xFrac: 0.00, yFrac: 0.68 },  // start low (same depth as valley1)
+        { xFrac: 0.18, yFrac: 0.22 },  // dot 0: peak1 → section 0
+        { xFrac: 0.36, yFrac: 0.68 },  // dot 1: valley1 → section 1
+        { xFrac: 0.55, yFrac: 0.18 },  // dot 2: peak2 → section 2
+        { xFrac: 0.68, yFrac: 0.40 },  // start of drop
+        { xFrac: 0.82, yFrac: 0.88 },  // steep drop
+        { xFrac: 1.00, yFrac: 0.95 }   // dot 3: valley2 → section 3/4
       ];
 
-      // The solid line covers points 0-3, dotted covers 3-6
-      var solidEnd = 3;
+      // Dot key-point indices and which section triggers them
+      var dotKeyIndices = [1, 2, 3, 6];
+      // Section index at which each dot should be reached
+      // Section 0 → dot 0, Section 1 → dot 1, Section 2 → dot 2, Section 4 → dot 3
+      var dotSectionTriggers = [0, 1, 2, 4];
 
-      function buildPaths(w, h) {
-        // Convert fractions to pixels
-        var pts = keyPoints.map(function(p) {
-          return { x: p.xFrac * w, y: p.yFrac * h };
-        });
+      var solidEnd = 3; // solid path covers key points 0–3, dotted covers 3–6
 
-        // Build smooth cubic bezier path segments
-        // Control points at ~55% of segment width for sinusoidal feel
-        function cubicSegments(points) {
-          if (points.length < 2) return '';
-          var d = 'M ' + points[0].x.toFixed(1) + ',' + points[0].y.toFixed(1);
-          for (var i = 0; i < points.length - 1; i++) {
-            var p0 = points[i];
-            var p1 = points[i + 1];
-            var dx = p1.x - p0.x;
-            // Control points: horizontal tangents for smooth sine-like curves
-            var cp1x = p0.x + dx * 0.55;
-            var cp1y = p0.y;
-            var cp2x = p1.x - dx * 0.55;
-            var cp2y = p1.y;
-            d += ' C ' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) +
-                 ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) +
-                 ' ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1);
-          }
-          return d;
+      var panelW = 0, panelH = 0, totalW = 0;
+      var pts = [];
+
+      // Path lengths from start to each dot (measured after building paths)
+      // We use a single combined path for measurement
+      var segLengths = [];   // cumulative length at each key point
+      var fullLength = 0;
+      var solidLen = 0;
+      var dotLengths = [];   // path length to reach each dot
+      var introLength = 0;
+
+      function cubicSegments(points) {
+        if (points.length < 2) return '';
+        var d = 'M ' + points[0].x.toFixed(1) + ',' + points[0].y.toFixed(1);
+        for (var i = 0; i < points.length - 1; i++) {
+          var p0 = points[i];
+          var p1 = points[i + 1];
+          var dx = p1.x - p0.x;
+          var cp1x = p0.x + dx * 0.55;
+          var cp1y = p0.y;
+          var cp2x = p1.x - dx * 0.55;
+          var cp2y = p1.y;
+          d += ' C ' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) +
+               ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) +
+               ' ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1);
         }
-
-        var solidPts = pts.slice(0, solidEnd + 1);
-        var dottedPts = pts.slice(solidEnd);
-
-        solidPath.setAttribute('d', cubicSegments(solidPts));
-        dottedPath.setAttribute('d', cubicSegments(dottedPts));
-
-        // Position dots at key waypoints: peak1, valley1, peak2, valley2
-        var dotPositions = [pts[1], pts[2], pts[3], pts[6]];
-        dotPositions.forEach(function(pos, i) {
-          dotEls[i].setAttribute('cx', pos.x.toFixed(1));
-          dotEls[i].setAttribute('cy', pos.y.toFixed(1));
-        });
-
-        // Update clip rect height
-        dottedClipRect.setAttribute('height', h);
+        return d;
       }
 
-      function resizeSVG() {
-        var w = svgEl.clientWidth;
-        var h = svgEl.clientHeight;
-        if (w === 0 || h === 0) return;
-        svgEl.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
-        buildPaths(w, h);
-        // Update stroke-dasharray for solid path
-        var solidLen = solidPath.getTotalLength();
+      // Create a temporary full path to measure cumulative lengths at each key point
+      function measureSegments() {
+        var tempPath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        segLengths = [0]; // length at point 0 = 0
+        for (var i = 1; i < pts.length; i++) {
+          tempPath.setAttribute('d', cubicSegments(pts.slice(0, i + 1)));
+          segLengths.push(tempPath.getTotalLength());
+        }
+        fullLength = segLengths[segLengths.length - 1];
+
+        // Lengths to each dot
+        dotLengths = dotKeyIndices.map(function(ki) { return segLengths[ki]; });
+        introLength = dotLengths[0]; // length to first dot
+      }
+
+      function buildGeometry() {
+        panelW = svgEl.clientWidth;
+        panelH = svgEl.clientHeight;
+        if (panelW === 0 || panelH === 0) return;
+        totalW = panelW * WAVE_WIDTH_MULT;
+
+        pts = keyPoints.map(function(p) {
+          return { x: p.xFrac * totalW, y: p.yFrac * panelH };
+        });
+
+        solidPath.setAttribute('d', cubicSegments(pts.slice(0, solidEnd + 1)));
+        dottedPath.setAttribute('d', cubicSegments(pts.slice(solidEnd)));
+
+        // Position dots
+        dotKeyIndices.forEach(function(idx, i) {
+          dotEls[i].setAttribute('cx', pts[idx].x.toFixed(1));
+          dotEls[i].setAttribute('cy', pts[idx].y.toFixed(1));
+        });
+
+        dottedClipRect.setAttribute('height', panelH);
+
+        // Measure segment lengths
+        measureSegments();
+
+        // Stroke dash setup for solid path
+        solidLen = solidPath.getTotalLength();
         solidPath.style.strokeDasharray = solidLen;
         solidPath.style.strokeDashoffset = solidLen;
-        // Re-run scroll update with new dimensions
+
         update();
       }
 
+      /* ── Intro animation: draw line up to first peak on load ── */
+      var introDone = false;
+      var introStart = null;
+      var INTRO_DURATION = 1200;
+
+      function animateIntro(timestamp) {
+        if (!introStart) introStart = timestamp;
+        var elapsed = timestamp - introStart;
+        var t = Math.min(elapsed / INTRO_DURATION, 1);
+        var eased = 1 - Math.pow(1 - t, 3);
+
+        // Reveal solid path up to first dot
+        // introLength is measured on full path; scale to solid path proportion
+        var solidReveal = Math.min(introLength, solidLen) * eased;
+        solidPath.style.strokeDashoffset = solidLen - solidReveal;
+
+        // Pan viewBox
+        var introEndX = pts[0].x + (pts[1].x - pts[0].x) * eased;
+        var vbX = introEndX - panelW * ENDPOINT_POS;
+        vbX = Math.max(0, vbX);
+        svgEl.setAttribute('viewBox', vbX.toFixed(1) + ' 0 ' + panelW + ' ' + panelH);
+
+        if (t < 1) {
+          requestAnimationFrame(animateIntro);
+        } else {
+          introDone = true;
+          dotEls[0].classList.add('visible');
+        }
+      }
+
+      setTimeout(function() {
+        requestAnimationFrame(animateIntro);
+      }, 800);
+
       /* ── Scroll animation ────────────────────────────────────── */
       var ticking = false;
+      var NUM_SECTIONS = 6;
 
       function onScroll() {
         if (ticking) return;
@@ -543,50 +704,213 @@
         requestAnimationFrame(update);
       }
 
+      // Given scroll progress (0–1), compute how much total path length to reveal.
+      // Each section snap maps to revealing path up to the corresponding dot.
+      // Between sections, interpolate smoothly.
+      function getRevealLength(progress) {
+        // progress 0 → section 0 (dot 0), progress 0.25 → section 1 (dot 1), etc.
+        var sectionProgress = progress * (NUM_SECTIONS - 1); // 0–4
+        var secIdx = Math.floor(sectionProgress);
+        var t = sectionProgress - secIdx;
+
+        // Map section index to target path length
+        function lengthForSection(s) {
+          if (s <= 0) return dotLengths[0];
+          if (s === 1) return dotLengths[1];
+          if (s === 2) return dotLengths[2];
+          if (s === 3) return dotLengths[2] + (dotLengths[3] - dotLengths[2]) * 0.5;
+          return dotLengths[3]; // sections 4 and 5: wave is fully revealed
+        }
+
+        var fromLen = lengthForSection(secIdx);
+        var toLen = lengthForSection(Math.min(secIdx + 1, NUM_SECTIONS - 1));
+        return fromLen + (toLen - fromLen) * t;
+      }
+
+      function getEndpointX(revealLen) {
+        // Walk through key points to find where revealLen lands
+        for (var i = 1; i < pts.length; i++) {
+          if (revealLen <= segLengths[i]) {
+            var segStart = segLengths[i - 1];
+            var segEnd = segLengths[i];
+            var t = (segEnd > segStart) ? (revealLen - segStart) / (segEnd - segStart) : 0;
+            return pts[i - 1].x + (pts[i].x - pts[i - 1].x) * t;
+          }
+        }
+        return pts[pts.length - 1].x;
+      }
+
       function update() {
         ticking = false;
+        if (panelW === 0 || fullLength === 0) return;
         var scrollTop = container.scrollTop;
         var maxScroll = container.scrollHeight - container.clientHeight;
         if (maxScroll <= 0) return;
 
+        if (!introDone && scrollTop < 5) return;
+
         var progress = scrollTop / maxScroll;
+        var revealLen = getRevealLength(progress);
 
-        // Solid path: reveal over 0%–60%
-        var solidLen = solidPath.getTotalLength();
-        var solidProgress = Math.min(progress / 0.6, 1);
-        solidPath.style.strokeDashoffset = solidLen * (1 - solidProgress);
+        // Always show at least the intro
+        revealLen = Math.max(introLength, revealLen);
 
-        // Dotted path: reveal via clip-path over 60%–100%
-        var dottedProgress = Math.max(0, Math.min((progress - 0.6) / 0.4, 1));
-        var svgW = svgEl.clientWidth;
-        // Clip from the start of dotted section to the end
-        var dottedStartX = keyPoints[solidEnd].xFrac * svgW;
-        var dottedEndX = svgW;
-        var clipW = dottedStartX + dottedProgress * (dottedEndX - dottedStartX);
-        dottedClipRect.setAttribute('width', clipW);
+        // Solid path: reveal up to solidLen
+        var solidReveal = Math.min(revealLen, solidLen);
+        solidPath.style.strokeDashoffset = solidLen - solidReveal;
 
-        // Blinking dots
+        // Dotted path: reveal via clip rect for anything beyond solid
+        if (revealLen > solidLen) {
+          var dottedFrac = (revealLen - solidLen) / (fullLength - solidLen);
+          var dottedStartX = pts[solidEnd].x;
+          var clipW = dottedStartX + dottedFrac * (pts[pts.length - 1].x - dottedStartX);
+          dottedClipRect.setAttribute('width', clipW + 10);
+        } else {
+          dottedClipRect.setAttribute('width', 0);
+        }
+
+        // Pan viewBox
+        var endX = getEndpointX(revealLen);
+        var vbX = endX - panelW * ENDPOINT_POS;
+        vbX = Math.max(0, vbX);
+        svgEl.setAttribute('viewBox', vbX.toFixed(1) + ' 0 ' + panelW + ' ' + panelH);
+
+        // Show dots when their path length has been reached
         for (var i = 0; i < dotEls.length; i++) {
-          if (progress >= dotThresholds[i]) {
+          if (revealLen >= dotLengths[i] - 2) {
             dotEls[i].classList.add('visible');
           } else {
             dotEls[i].classList.remove('visible');
           }
         }
 
-        // Detect active section and adjust wave stroke for dark sections
+        // Smooth background color transition across both columns
+        updateColors(scrollTop);
+
+        // Dot explosion overlay
+        updateOverlay(scrollTop);
+      }
+
+      container.addEventListener('scroll', onScroll, { passive: true });
+
+
+      /* ── Color interpolation for smooth background transitions ── */
+      // RGB values for each section's background
+      var sectionColors = [
+        [255, 255, 255],  // 0: white
+        [245, 245, 245],  // 1: muted
+        [255, 255, 255],  // 2: white
+        [0, 0, 0],        // 3: DROP (black)
+        [0, 0, 0],        // 4: stays dark
+        [0, 0, 0]         // 5: finale (overlay covers it)
+      ];
+
+      var sections = document.querySelectorAll('.section');
+      var pageSplit = document.querySelector('.page-split');
+
+      function lerpColor(a, b, t) {
+        return [
+          Math.round(a[0] + (b[0] - a[0]) * t),
+          Math.round(a[1] + (b[1] - a[1]) * t),
+          Math.round(a[2] + (b[2] - a[2]) * t)
+        ];
+      }
+
+      function updateColors(scrollTop) {
         var sectionH = container.clientHeight;
-        var activeIndex = Math.round(scrollTop / sectionH);
-        if (activeIndex === 3) {
+        var rawIndex = scrollTop / sectionH;
+        var idx = Math.floor(rawIndex);
+        var t = rawIndex - idx;
+
+        // Clamp
+        if (idx < 0) { idx = 0; t = 0; }
+        if (idx >= sectionColors.length - 1) { idx = sectionColors.length - 2; t = 1; }
+
+        var c = lerpColor(sectionColors[idx], sectionColors[idx + 1], t);
+        var bg = 'rgb(' + c[0] + ',' + c[1] + ',' + c[2] + ')';
+        pageSplit.style.background = bg;
+
+        // Determine if we're in dark territory (brightness < 128)
+        var brightness = c[0] * 0.299 + c[1] * 0.587 + c[2] * 0.114;
+        var isDark = brightness < 128;
+
+        sections.forEach(function(s) {
+          s.classList.toggle('inverted', isDark);
+        });
+
+        // Wave stroke: use lighter color when dark
+        if (isDark) {
           svgEl.style.setProperty('--wave-stroke', 'rgba(255,255,255,0.35)');
         } else {
           svgEl.style.removeProperty('--wave-stroke');
         }
       }
 
-      container.addEventListener('scroll', onScroll, { passive: true });
+      /* ── Dot explosion overlay ──────────────────────────────── */
+      var overlay = document.getElementById('dot-overlay');
+      var overlayContent = document.getElementById('dot-overlay-content');
+      var cachedDotX = 0, cachedDotY = 0;
+      var maxRadius = 0;
 
-      /* ── Scroll hint dismiss ─────────────────────────────────── */
+      function cacheDotPosition() {
+        // Calculate from SVG coordinates + wave column position
+        // The dot is at pts[6] in SVG space. When section 4 is active,
+        // the viewBox is panned so the endpoint (pts[6].x) is at ENDPOINT_POS.
+        // So screen X = wave column left + ENDPOINT_POS * panelW
+        // Screen Y = nav height + (pts[6].y / panelH) * panelH = nav offset + pts[6].y
+        var waveColRect = waveCol.getBoundingClientRect();
+        if (pts.length > 6) {
+          // When fully revealed, the viewBox pans so endpoint is at ENDPOINT_POS
+          cachedDotX = waveColRect.left + panelW * ENDPOINT_POS;
+          cachedDotY = waveColRect.top + pts[6].y;
+        }
+        maxRadius = Math.hypot(window.innerWidth, window.innerHeight);
+        overlay.style.setProperty('--dot-cx', cachedDotX + 'px');
+        overlay.style.setProperty('--dot-cy', cachedDotY + 'px');
+      }
+
+      function updateOverlay(scrollTop) {
+        var sectionH = container.clientHeight;
+        var rawIndex = scrollTop / sectionH;
+
+        if (rawIndex <= 4.0) {
+          overlay.classList.remove('active');
+          overlay.style.clipPath = 'circle(0px at ' + cachedDotX + 'px ' + cachedDotY + 'px)';
+          overlayContent.classList.remove('visible');
+          overlayContent.style.opacity = '0';
+          dotEls[3].style.opacity = '';
+          return;
+        }
+
+        // Cache dot position at the start of expansion
+        if (rawIndex > 3.9 && rawIndex < 4.1) {
+          cacheDotPosition();
+        }
+
+        var t = Math.min((rawIndex - 4.0) / 1.0, 1.0);
+
+        overlay.classList.add('active');
+
+        // Hide the actual SVG dot so it doesn't show through
+        dotEls[3].style.opacity = '0';
+
+        // Circle expansion: 0–80% of scroll
+        var circleT = Math.min(t / 0.7, 1.0);
+        var eased = 1 - Math.pow(1 - circleT, 3); // ease-out cubic
+        var radius = eased * maxRadius;
+        overlay.style.clipPath = 'circle(' + radius.toFixed(1) + 'px at ' + cachedDotX + 'px ' + cachedDotY + 'px)';
+
+        // Text fades in during last 30%
+        var textT = Math.max(0, (t - 0.7) / 0.3);
+        overlayContent.style.opacity = textT;
+        if (textT > 0.5) {
+          overlayContent.classList.add('visible');
+        } else {
+          overlayContent.classList.remove('visible');
+        }
+      }
+
+      /* ── Scroll hint ─────────────────────────────────────────── */
       var scrollHint = document.getElementById('scroll-hint');
       var hintDismissed = false;
 
@@ -600,7 +924,6 @@
         if (container.scrollTop > 20) dismissHint();
       }, { passive: true });
 
-      // Auto-fade after 6s
       setTimeout(dismissHint, 6000);
 
       /* ── IntersectionObserver for section content ─────────────── */
@@ -621,18 +944,20 @@
         observer.observe(inner);
       });
 
-      /* ── Resize handling ─────────────────────────────────────── */
+      /* ── Resize ──────────────────────────────────────────────── */
       var resizeTimer;
       window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
           measureNav();
-          resizeSVG();
+          buildGeometry();
+          cacheDotPosition();
         }, 100);
       });
 
       /* ── Init ────────────────────────────────────────────────── */
-      resizeSVG();
+      buildGeometry();
+      cacheDotPosition();
       update();
     })();
   </script>
