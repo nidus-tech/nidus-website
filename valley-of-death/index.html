@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The Valley of Death — Nidus">
+  <title>Valley of Death &mdash; Nidus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Orbitron:wght@900&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    body {
+      display: block;
+    }
+
+    .nav-logo {
+      font-family: "Orbitron", sans-serif;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── CSS variable for nav height ─────────────────────────── */
+    :root {
+      --nav-h: 57px;
+    }
+
+    /* ── Scroll-snap container ─────────────────────────────────── */
+    .scroll-container {
+      height: calc(100dvh - var(--nav-h, 57px));
+      overflow-y: auto;
+      scroll-snap-type: y mandatory;
+      position: relative;
+    }
+
+    .section {
+      height: calc(100dvh - var(--nav-h, 57px));
+      scroll-snap-align: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 2;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    /* ── Valley sections: muted background ───────────────────── */
+    .section[data-index="1"],
+    .section[data-index="4"] {
+      background: var(--muted);
+    }
+
+    /* ── DROP section: inverted ───────────────────────────────── */
+    .section[data-index="3"] {
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    .section[data-index="3"] .section-label {
+      color: rgba(255,255,255,0.5);
+    }
+
+    .section[data-index="3"] .section-body {
+      color: rgba(255,255,255,0.65);
+    }
+
+    .section[data-index="3"] .section-stat {
+      color: rgba(255,255,255,0.5);
+      border-top-color: rgba(255,255,255,0.2);
+    }
+
+    .section[data-index="3"] .deco-rule {
+      background: var(--bg);
+    }
+
+    .section[data-index="3"] .deco-square {
+      border-color: var(--bg);
+    }
+
+    .section-inner {
+      max-width: 600px;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* ── Deco element (above label) ──────────────────────────── */
+    .section-deco {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-deco .deco-rule {
+      width: 2.5rem;
+      height: 2px;
+      background: var(--fg);
+    }
+
+    .section-deco .deco-square {
+      width: 7px;
+      height: 7px;
+      border: 2px solid var(--fg);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading {
+      font-family: "Orbitron", sans-serif;
+      font-size: clamp(1.75rem, 4vw, 2.75rem);
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.25rem;
+    }
+
+    .section-body {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--muted-fg);
+    }
+
+    /* ── Stat line ────────────────────────────────────────────── */
+    .section-stat {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      margin-top: 1.75rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-light);
+    }
+
+    /* ── SVG wave overlay ──────────────────────────────────────── */
+    .wave-svg {
+      position: fixed;
+      top: var(--nav-h, 57px);
+      left: 0;
+      width: 100%;
+      height: calc(100dvh - var(--nav-h, 57px));
+      z-index: 3;
+      pointer-events: none;
+      /* wave naturally disappears against the dark DROP section */
+    }
+
+    .wave-svg path {
+      fill: none;
+      stroke: var(--wave-stroke, var(--fg));
+      stroke-width: 2.5;
+      transition: stroke 0.4s ease;
+    }
+
+    #wave-dotted {
+      stroke-dasharray: 8 6;
+    }
+
+    /* ── Blinking dots ─────────────────────────────────────────── */
+    .wave-dot {
+      fill: var(--wave-stroke, var(--fg));
+      opacity: 0;
+      transition: opacity 0.3s ease, fill 0.4s ease;
+    }
+
+    .wave-dot.visible {
+      opacity: 1;
+      animation: blink 1.2s ease-in-out infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.15; }
+    }
+
+    /* ── Scroll-triggered entrance animations ────────────────── */
+    .section-inner {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .section-inner.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .section-inner.visible .section-deco { transition-delay: 0s; }
+    .section-inner.visible .section-label { transition-delay: 0.06s; }
+    .section-inner.visible .section-heading { transition-delay: 0.12s; }
+    .section-inner.visible .section-body { transition-delay: 0.24s; }
+    .section-inner.visible .section-stat { transition-delay: 0.36s; }
+
+    .section-inner .section-deco,
+    .section-inner .section-label,
+    .section-inner .section-heading,
+    .section-inner .section-body,
+    .section-inner .section-stat {
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .section-inner.visible .section-deco,
+    .section-inner.visible .section-label,
+    .section-inner.visible .section-heading,
+    .section-inner.visible .section-body,
+    .section-inner.visible .section-stat {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ── Section 1: entrance on load (staggered) ─────────────── */
+    .section[data-index="0"] .section-inner {
+      opacity: 1;
+      transform: none;
+    }
+
+    .section[data-index="0"] .section-deco {
+      opacity: 0;
+      animation: fade-up 0.5s ease 0.8s forwards;
+    }
+    .section[data-index="0"] .section-label {
+      opacity: 0;
+      animation: fade-up 0.5s ease 0.9s forwards;
+    }
+    .section[data-index="0"] .section-heading {
+      opacity: 0;
+      animation: fade-up 0.5s ease 1.1s forwards;
+    }
+    .section[data-index="0"] .section-body {
+      opacity: 0;
+      animation: fade-up 0.5s ease 1.4s forwards;
+    }
+    .section[data-index="0"] .section-stat {
+      opacity: 0;
+      animation: fade-up 0.5s ease 1.6s forwards;
+    }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Scroll affordance ───────────────────────────────────── */
+    .scroll-hint {
+      position: absolute;
+      bottom: 2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted-fg);
+      opacity: 0;
+      animation: hint-in 0.4s ease 2s forwards;
+      transition: opacity 0.4s ease;
+      z-index: 4;
+    }
+
+    .scroll-hint.hidden {
+      opacity: 0 !important;
+      animation: none;
+    }
+
+    .scroll-hint-arrow {
+      width: 16px;
+      height: 16px;
+      animation: bounce-arrow 1.5s ease-in-out infinite;
+    }
+
+    @keyframes hint-in {
+      from { opacity: 0; transform: translateX(-50%) translateY(4px); }
+      to   { opacity: 1; transform: translateX(-50%) translateY(0); }
+    }
+
+    @keyframes bounce-arrow {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(4px); }
+    }
+
+    /* ── Footer inside last section ──────────────────────────── */
+    .section-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+    }
+
+    .section-footer footer {
+      border-top-color: var(--border-light);
+    }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      .section-inner {
+        padding: 1.5rem;
+      }
+
+      .wave-svg {
+        opacity: 0.35;
+      }
+
+      .section-heading {
+        font-size: clamp(1.5rem, 5vw, 2rem);
+      }
+
+      .scroll-hint {
+        bottom: 1.5rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <nav>
+    <a href="/" class="nav-logo" aria-label="Nidus home">NIDUS</a>
+    <ul class="nav-links" role="list">
+      <li><a href="/thesis">Thesis</a></li>
+      <li><a href="/careers">Careers</a></li>
+    </ul>
+  </nav>
+
+  <!-- Fixed SVG wave — sibling of scroll container, not inside it -->
+  <svg class="wave-svg" aria-hidden="true">
+    <defs>
+      <clipPath id="dotted-clip">
+        <rect id="dotted-clip-rect" x="0" y="0" width="0" height="100%" />
+      </clipPath>
+    </defs>
+    <path id="wave-solid" />
+    <path id="wave-dotted" clip-path="url(#dotted-clip)" />
+    <circle class="wave-dot" id="dot-peak1" r="5" />
+    <circle class="wave-dot" id="dot-valley1" r="5" />
+    <circle class="wave-dot" id="dot-peak2" r="5" />
+    <circle class="wave-dot" id="dot-valley2" r="5" />
+  </svg>
+
+  <div class="scroll-container" id="main">
+
+    <!-- Section 1: Peak 1 -->
+    <section class="section" data-index="0">
+      <div class="section-inner">
+        <div class="section-deco" aria-hidden="true">
+          <div class="deco-rule"></div>
+          <div class="deco-square"></div>
+        </div>
+        <p class="section-label">Peak 1</p>
+        <h2 class="section-heading">The Promise</h2>
+        <p class="section-body">American Dynamism companies raise billions. They hit product-market fit. Orders start flowing in. The future looks bright.</p>
+        <p class="section-stat">$220B+ raised in defense-tech since 2021</p>
+      </div>
+      <div class="scroll-hint" id="scroll-hint">
+        Scroll
+        <svg class="scroll-hint-arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 3v10M3 9l5 5 5-5" />
+        </svg>
+      </div>
+    </section>
+
+    <!-- Section 2: Valley 1 (Valley of Death) -->
+    <section class="section" data-index="1">
+      <div class="section-inner">
+        <div class="section-deco" aria-hidden="true">
+          <div class="deco-rule"></div>
+          <div class="deco-square"></div>
+        </div>
+        <p class="section-label">Valley of Death</p>
+        <h2 class="section-heading">The First Valley</h2>
+        <p class="section-body">Every startup knows this valley. The gap between prototype and product. Most companies prepare for this. It&rsquo;s hard, but it&rsquo;s expected.</p>
+        <p class="section-stat">~90% of hardware startups fail here</p>
+      </div>
+    </section>
+
+    <!-- Section 3: Peak 2 -->
+    <section class="section" data-index="2">
+      <div class="section-inner">
+        <div class="section-deco" aria-hidden="true">
+          <div class="deco-rule"></div>
+          <div class="deco-square"></div>
+        </div>
+        <p class="section-label">Peak 2</p>
+        <h2 class="section-heading">Scale in Sight</h2>
+        <p class="section-body">Product works. Contracts signed. The path to manufacturing at scale seems clear. But there&rsquo;s a problem no one is talking about.</p>
+        <p class="section-stat">$933B in DoD contracts awarded FY2023</p>
+      </div>
+    </section>
+
+    <!-- Section 4: The DROP -->
+    <section class="section" data-index="3">
+      <div class="section-inner">
+        <div class="section-deco" aria-hidden="true">
+          <div class="deco-rule"></div>
+          <div class="deco-square"></div>
+        </div>
+        <p class="section-label">The Drop</p>
+        <h2 class="section-heading">The Bottom Falls Out</h2>
+        <p class="section-body">The workforce doesn&rsquo;t exist. 250,000 workers needed for the Navy alone. 3.8 million for manufacturing. The average defense worker is 55. Gen Z wants to be influencers.</p>
+        <p class="section-stat">Avg. age of skilled defense worker: 55</p>
+      </div>
+    </section>
+
+    <!-- Section 5: Valley 2 (2nd Valley of Death) -->
+    <section class="section" data-index="4">
+      <div class="section-inner">
+        <div class="section-deco" aria-hidden="true">
+          <div class="deco-rule"></div>
+          <div class="deco-square"></div>
+        </div>
+        <p class="section-label">2nd Valley of Death</p>
+        <h2 class="section-heading">The Valley No One Prepared For</h2>
+        <p class="section-body">American Dynamism is betting billions on a workforce that doesn&rsquo;t exist. This is the valley of death that will define the next decade.</p>
+        <p class="section-stat">3.8M manufacturing jobs unfilled by 2033</p>
+      </div>
+      <div class="section-footer">
+        <footer>
+          <p class="footer-copy">Modular, software-defined manufacturing systems<br>powered by foundational robotics AI.</p>
+          <a href="mailto:info@nidus.tech" class="btn">Contact Us</a>
+        </footer>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    (function () {
+      /* ── Measure nav height dynamically ──────────────────────── */
+      var navEl = document.querySelector('nav');
+      function measureNav() {
+        var h = navEl.offsetHeight;
+        document.documentElement.style.setProperty('--nav-h', h + 'px');
+      }
+      measureNav();
+
+      /* ── Elements ────────────────────────────────────────────── */
+      var container = document.querySelector('.scroll-container');
+      var svgEl = document.querySelector('.wave-svg');
+      var solidPath = document.getElementById('wave-solid');
+      var dottedPath = document.getElementById('wave-dotted');
+      var dottedClipRect = document.getElementById('dotted-clip-rect');
+      var dotEls = [
+        document.getElementById('dot-peak1'),
+        document.getElementById('dot-valley1'),
+        document.getElementById('dot-peak2'),
+        document.getElementById('dot-valley2')
+      ];
+      var dotThresholds = [0.0, 0.2, 0.4, 0.85];
+
+      /* ── SVG path generation (dynamic viewBox) ───────────────── */
+      // Key Y positions as fractions of height: peak=0.22, valley=0.65, peak2=0.15, drop=0.92
+      var keyPoints = [
+        { xFrac: 0.0,  yFrac: 0.30 },  // start (peak1 level)
+        { xFrac: 0.2,  yFrac: 0.30 },  // peak1
+        { xFrac: 0.4,  yFrac: 0.68 },  // valley1
+        { xFrac: 0.6,  yFrac: 0.18 },  // peak2
+        { xFrac: 0.72, yFrac: 0.40 },  // start of drop
+        { xFrac: 0.85, yFrac: 0.88 },  // steep drop
+        { xFrac: 1.0,  yFrac: 0.95 }   // valley2 (bottom)
+      ];
+
+      // The solid line covers points 0-3, dotted covers 3-6
+      var solidEnd = 3;
+
+      function buildPaths(w, h) {
+        // Convert fractions to pixels
+        var pts = keyPoints.map(function(p) {
+          return { x: p.xFrac * w, y: p.yFrac * h };
+        });
+
+        // Build smooth cubic bezier path segments
+        // Control points at ~55% of segment width for sinusoidal feel
+        function cubicSegments(points) {
+          if (points.length < 2) return '';
+          var d = 'M ' + points[0].x.toFixed(1) + ',' + points[0].y.toFixed(1);
+          for (var i = 0; i < points.length - 1; i++) {
+            var p0 = points[i];
+            var p1 = points[i + 1];
+            var dx = p1.x - p0.x;
+            // Control points: horizontal tangents for smooth sine-like curves
+            var cp1x = p0.x + dx * 0.55;
+            var cp1y = p0.y;
+            var cp2x = p1.x - dx * 0.55;
+            var cp2y = p1.y;
+            d += ' C ' + cp1x.toFixed(1) + ',' + cp1y.toFixed(1) +
+                 ' ' + cp2x.toFixed(1) + ',' + cp2y.toFixed(1) +
+                 ' ' + p1.x.toFixed(1) + ',' + p1.y.toFixed(1);
+          }
+          return d;
+        }
+
+        var solidPts = pts.slice(0, solidEnd + 1);
+        var dottedPts = pts.slice(solidEnd);
+
+        solidPath.setAttribute('d', cubicSegments(solidPts));
+        dottedPath.setAttribute('d', cubicSegments(dottedPts));
+
+        // Position dots at key waypoints: peak1, valley1, peak2, valley2
+        var dotPositions = [pts[1], pts[2], pts[3], pts[6]];
+        dotPositions.forEach(function(pos, i) {
+          dotEls[i].setAttribute('cx', pos.x.toFixed(1));
+          dotEls[i].setAttribute('cy', pos.y.toFixed(1));
+        });
+
+        // Update clip rect height
+        dottedClipRect.setAttribute('height', h);
+      }
+
+      function resizeSVG() {
+        var w = svgEl.clientWidth;
+        var h = svgEl.clientHeight;
+        if (w === 0 || h === 0) return;
+        svgEl.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+        buildPaths(w, h);
+        // Update stroke-dasharray for solid path
+        var solidLen = solidPath.getTotalLength();
+        solidPath.style.strokeDasharray = solidLen;
+        solidPath.style.strokeDashoffset = solidLen;
+        // Re-run scroll update with new dimensions
+        update();
+      }
+
+      /* ── Scroll animation ────────────────────────────────────── */
+      var ticking = false;
+
+      function onScroll() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+
+      function update() {
+        ticking = false;
+        var scrollTop = container.scrollTop;
+        var maxScroll = container.scrollHeight - container.clientHeight;
+        if (maxScroll <= 0) return;
+
+        var progress = scrollTop / maxScroll;
+
+        // Solid path: reveal over 0%–60%
+        var solidLen = solidPath.getTotalLength();
+        var solidProgress = Math.min(progress / 0.6, 1);
+        solidPath.style.strokeDashoffset = solidLen * (1 - solidProgress);
+
+        // Dotted path: reveal via clip-path over 60%–100%
+        var dottedProgress = Math.max(0, Math.min((progress - 0.6) / 0.4, 1));
+        var svgW = svgEl.clientWidth;
+        // Clip from the start of dotted section to the end
+        var dottedStartX = keyPoints[solidEnd].xFrac * svgW;
+        var dottedEndX = svgW;
+        var clipW = dottedStartX + dottedProgress * (dottedEndX - dottedStartX);
+        dottedClipRect.setAttribute('width', clipW);
+
+        // Blinking dots
+        for (var i = 0; i < dotEls.length; i++) {
+          if (progress >= dotThresholds[i]) {
+            dotEls[i].classList.add('visible');
+          } else {
+            dotEls[i].classList.remove('visible');
+          }
+        }
+
+        // Detect active section and adjust wave stroke for dark sections
+        var sectionH = container.clientHeight;
+        var activeIndex = Math.round(scrollTop / sectionH);
+        if (activeIndex === 3) {
+          svgEl.style.setProperty('--wave-stroke', 'rgba(255,255,255,0.35)');
+        } else {
+          svgEl.style.removeProperty('--wave-stroke');
+        }
+      }
+
+      container.addEventListener('scroll', onScroll, { passive: true });
+
+      /* ── Scroll hint dismiss ─────────────────────────────────── */
+      var scrollHint = document.getElementById('scroll-hint');
+      var hintDismissed = false;
+
+      function dismissHint() {
+        if (hintDismissed) return;
+        hintDismissed = true;
+        scrollHint.classList.add('hidden');
+      }
+
+      container.addEventListener('scroll', function() {
+        if (container.scrollTop > 20) dismissHint();
+      }, { passive: true });
+
+      // Auto-fade after 6s
+      setTimeout(dismissHint, 6000);
+
+      /* ── IntersectionObserver for section content ─────────────── */
+      var sectionInners = document.querySelectorAll('.section[data-index]:not([data-index="0"]) .section-inner');
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      }, {
+        root: container,
+        threshold: 0.5
+      });
+
+      sectionInners.forEach(function(inner) {
+        observer.observe(inner);
+      });
+
+      /* ── Resize handling ─────────────────────────────────────── */
+      var resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          measureNav();
+          resizeSVG();
+        }, 100);
+      });
+
+      /* ── Init ────────────────────────────────────────────────── */
+      resizeSVG();
+      update();
+    })();
+  </script>
+</body>
+</html>
